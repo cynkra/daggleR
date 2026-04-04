@@ -1,0 +1,21 @@
+Package: daggle
+Title: R Interface to the Daggle DAG Scheduler
+Version: 0.1.0
+Authors@R: person("David", "Schoch", role = c("aut", "cre"),
+    email = "david@schochastics.net")
+Description: Companion R package for daggle, a lightweight DAG scheduler for R.
+    Provides in-step helpers for emitting outputs and reading metadata,
+    plus API wrappers for triggering runs, checking status, and managing
+    approval gates.
+License: GPL-3
+URL: https://github.com/cynkra/daggle-r
+BugReports: https://github.com/cynkra/daggle-r/issues
+Imports: httr2
+Suggests:
+    testthat (>= 3.0.0),
+    withr,
+    httptest2
+Config/testthat/edition: 3
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
