@@ -1,0 +1,1 @@
+{"run_id": "run-001", "dag_name": "etl", "status": "success", "started": "2024-01-01T00:00:00Z", "ended": "2024-01-01T00:02:00Z", "duration_seconds": 120, "dag_hash": "abc123", "r_version": "4.4.0", "platform": "aarch64-apple-darwin", "params": {}, "steps": [{"step_id": "extract", "status": "success", "duration_seconds": 30, "attempts": 1, "error": null, "message": null}]}

@@ -1,0 +1,4 @@
+[
+  {"run_id": "run-001", "started": "2024-01-01T00:00:00Z", "status": "success", "duration_seconds": 120, "dag_hash": "abc123"},
+  {"run_id": "run-002", "started": "2024-01-02T00:00:00Z", "status": "running", "duration_seconds": 60, "dag_hash": "def456"}
+]

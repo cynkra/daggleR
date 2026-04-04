@@ -1,0 +1,1 @@
+{"name": "etl", "steps": 3, "step_ids": ["extract", "transform", "load"], "schedule": "0 * * * *", "workdir": "/opt/daggle/etl", "r_version": "4.4.0", "last_status": "success", "last_run_id": "run-001", "last_run": "2024-01-01T00:00:00Z"}

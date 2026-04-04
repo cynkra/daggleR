@@ -1,0 +1,4 @@
+[
+  {"step_id": "extract", "key": "row_count", "value": "42"},
+  {"step_id": "extract", "key": "file_path", "value": "/tmp/data.csv"}
+]
