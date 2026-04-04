@@ -1,4 +1,4 @@
-# daggle
+# daggleR
 
 Companion R package for [daggle](https://github.com/cynkra/daggle), a lightweight DAG scheduler for R.
 
@@ -17,15 +17,15 @@ These functions are used inside R steps executed by daggle. They require no netw
 
 ```r
 # Emit an output that downstream steps can read
-daggle::output("row_count", nrow(df))
+daggleR::output("row_count", nrow(df))
 
 # Read metadata about the current run
-daggle::run_id()
-daggle::dag_name()
-daggle::run_dir()
+daggleR::run_id()
+daggleR::dag_name()
+daggleR::run_dir()
 
 # Read an output from a completed upstream step
-accuracy <- daggle::get_output("fit-lda", "accuracy")
+accuracy <- daggleR::get_output("fit-lda", "accuracy")
 ```
 
 ### API wrappers
@@ -34,26 +34,26 @@ These functions talk to a running daggle API server (`daggle serve --port 8787`)
 
 ```r
 # List all DAGs
-daggle::list_dags()
+daggleR::list_dags()
 
 # Trigger a run
-daggle::trigger("etl", params = list(date = "2024-01-01"))
+daggleR::trigger("etl", params = list(date = "2024-01-01"))
 
 # Check run status
-daggle::get_run("etl", run_id = "latest")
+daggleR::get_run("etl", run_id = "latest")
 
 # Get outputs from a run
-daggle::get_outputs("etl", run_id = "latest")
+daggleR::get_outputs("etl", run_id = "latest")
 
 # View step logs
-daggle::get_step_log("etl", run_id = "run-001", step_id = "extract")
+daggleR::get_step_log("etl", run_id = "run-001", step_id = "extract")
 
 # Approval gates
-daggle::approve("etl", run_id = "run-001", step_id = "deploy")
-daggle::reject("etl", run_id = "run-001", step_id = "deploy")
+daggleR::approve("etl", run_id = "run-001", step_id = "deploy")
+daggleR::reject("etl", run_id = "run-001", step_id = "deploy")
 
 # Health check
-daggle::health()
+daggleR::health()
 ```
 
 ### Base URL configuration
@@ -66,11 +66,11 @@ API functions resolve the base URL in this order:
 
 ```r
 # Use a custom URL
-daggle::list_dags(base_url = "http://daggle.internal:9090")
+daggleR::list_dags(base_url = "http://daggle.internal:9090")
 
 # Or set via environment variable
 Sys.setenv(DAGGLE_API_URL = "http://daggle.internal:9090")
-daggle::list_dags()
+daggleR::list_dags()
 ```
 
 ## License

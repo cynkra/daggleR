@@ -1,4 +1,4 @@
 library(testthat)
-library(daggle)
+library(daggleR)
 
-test_check("daggle")
+test_check("daggleR")
