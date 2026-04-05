@@ -9,8 +9,8 @@ Description: Companion R package for daggle, a lightweight DAG scheduler for R.
     approval gates.
 Depends: R (>= 4.1.0)
 License: GPL-3
-URL: https://github.com/cynkra/daggle-r
-BugReports: https://github.com/cynkra/daggle-r/issues
+URL: https://github.com/cynkra/daggleR
+BugReports: https://github.com/cynkra/daggleR/issues
 Imports: httr2
 Suggests:
     testthat (>= 3.0.0),

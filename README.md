@@ -1,5 +1,7 @@
 # daggleR
 
+> **Note:** This package is experimental and under active development. The API may change without notice.
+
 Companion R package for [daggle](https://github.com/cynkra/daggle), a lightweight DAG scheduler for R.
 
 ## Installation
