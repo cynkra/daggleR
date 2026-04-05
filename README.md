@@ -6,7 +6,7 @@ Companion R package for [daggle](https://github.com/cynkra/daggle), a lightweigh
 
 ```r
 # install.packages("pak")
-pak::pak("cynkra/daggle-r")
+pak::pak("cynkra/daggleR")
 ```
 
 ## Usage
