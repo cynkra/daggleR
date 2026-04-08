@@ -1,0 +1,90 @@
+url: https://cynkra.github.io/daggleR/
+
+template:
+  bootstrap: 5
+  light-switch: true
+  bslib:
+    # Light mode — Canopy Green palette
+    primary: "#2F5D50"
+    secondary: "#1E2D24"
+    bg: "#F2F5F3"
+    fg: "#1E2D24"
+    base_font:
+      google: Inter
+    heading_font:
+      google: Cinzel
+    code_font:
+      google: JetBrains Mono
+  includes:
+    in_header: <link rel="icon" type="image/x-icon" href="favicon/favicon.ico">
+
+navbar:
+  bg: "#2F5D50"
+  type: dark
+  structure:
+    left: [intro, reference, articles]
+    right: [search, github, lightswitch]
+  components:
+    github:
+      icon: fa-github
+      href: https://github.com/cynkra/daggleR
+      aria-label: GitHub
+
+home:
+  title: daggleR
+  description: >
+    Companion R package for daggle, a lightweight DAG scheduler for R.
+
+footer:
+  structure:
+    left: developed_by
+    right: built_with
+
+reference:
+  - title: In-step helpers
+    desc: >
+      Functions for use inside R steps executed by daggle.
+      No network access or daggle binary needed.
+    contents:
+      - output
+      - run_id
+      - dag_name
+      - run_dir
+      - get_matrix
+      - get_output
+
+  - title: DAG management
+    desc: List and inspect DAGs.
+    contents:
+      - list_dags
+      - get_dag
+
+  - title: Run management
+    desc: Trigger, inspect, and cancel DAG runs.
+    contents:
+      - trigger
+      - list_runs
+      - get_run
+      - get_outputs
+      - get_step_log
+      - cancel_run
+
+  - title: Approval gates
+    desc: Approve or reject waiting steps.
+    contents:
+      - approve
+      - reject
+
+  - title: Project management
+    desc: Register and unregister projects.
+    contents:
+      - list_projects
+      - register_project
+      - unregister_project
+
+  - title: System
+    desc: Health checks, cleanup, and diagnostics.
+    contents:
+      - health
+      - cleanup
+      - cli_version
