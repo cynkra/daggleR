@@ -1,0 +1,175 @@
+> **Note:** This package is experimental and under active development.
+> The API may change without notice.
+
+Companion R package for [daggle](https://github.com/cynkra/daggle), a
+lightweight DAG scheduler for R.
+
+## Installation
+
+``` r
+# install.packages("pak")
+pak::pak("cynkra/daggleR")
+```
+
+## Usage
+
+### In-step helpers
+
+These functions are used inside R steps executed by daggle. They require
+no network access and no daggle binary.
+
+``` r
+# Emit an output that downstream steps can read
+daggleR::output("row_count", nrow(df))
+
+# Read metadata about the current run
+daggleR::run_id()
+daggleR::dag_name()
+daggleR::run_dir()
+
+# Read an output from a completed upstream step
+accuracy <- daggleR::get_output("fit-lda", "accuracy")
+
+# Read a matrix parameter (for matrix steps)
+region <- daggleR::get_matrix("region")
+```
+
+### API wrappers
+
+These functions talk to a running daggle API server (`daggle serve`).
+
+``` r
+# List all DAGs
+daggleR::list_dags()
+
+# Trigger a run
+daggleR::trigger("etl", params = list(date = "2024-01-01"))
+
+# Check run status
+daggleR::get_run("etl", run_id = "latest")
+
+# Get outputs from a run
+daggleR::get_outputs("etl", run_id = "latest")
+
+# View step logs
+daggleR::get_step_log("etl", run_id = "run-001", step_id = "extract")
+
+# Approval gates
+daggleR::approve("etl", run_id = "run-001", step_id = "deploy")
+daggleR::reject("etl", run_id = "run-001", step_id = "deploy")
+
+# Health check
+daggleR::health()
+```
+
+### Project management
+
+``` r
+# List registered projects
+daggleR::list_projects()
+
+# Register a project
+daggleR::register_project("/path/to/my-project")
+
+# Unregister a project
+daggleR::unregister_project("my-project")
+```
+
+### Base URL configuration
+
+API functions resolve the base URL in this order:
+
+1.  Explicit `base_url` parameter
+2.  `DAGGLE_API_URL` environment variable
+3.  Default: `http://127.0.0.1:9090`
+
+``` r
+# Use a custom URL
+daggleR::list_dags(base_url = "http://daggle.internal:9090")
+
+# Or set via environment variable
+Sys.setenv(DAGGLE_API_URL = "http://daggle.internal:9090")
+daggleR::list_dags()
+```
+
+## License
+
+GPL-3
+
+# Package index
+
+## In-step helpers
+
+Functions for use inside R steps executed by daggle. No network access
+or daggle binary needed.
+
+- [`output()`](https://cynkra.github.io/daggleR/reference/output.md) :
+  Emit a daggle output marker
+- [`run_id()`](https://cynkra.github.io/daggleR/reference/run_id.md) :
+  Get the current daggle run ID
+- [`dag_name()`](https://cynkra.github.io/daggleR/reference/dag_name.md)
+  : Get the current DAG name
+- [`run_dir()`](https://cynkra.github.io/daggleR/reference/run_dir.md) :
+  Get the current run directory
+- [`get_matrix()`](https://cynkra.github.io/daggleR/reference/get_matrix.md)
+  : Get a matrix parameter value
+- [`get_output()`](https://cynkra.github.io/daggleR/reference/get_output.md)
+  : Read an output from a completed upstream step
+
+## DAG management
+
+List and inspect DAGs.
+
+- [`list_dags()`](https://cynkra.github.io/daggleR/reference/list_dags.md)
+  : List all DAGs
+- [`get_dag()`](https://cynkra.github.io/daggleR/reference/get_dag.md) :
+  Get details for a single DAG
+
+## Run management
+
+Trigger, inspect, and cancel DAG runs.
+
+- [`trigger()`](https://cynkra.github.io/daggleR/reference/trigger.md) :
+  Trigger a new DAG run
+- [`list_runs()`](https://cynkra.github.io/daggleR/reference/list_runs.md)
+  : List runs for a DAG
+- [`get_run()`](https://cynkra.github.io/daggleR/reference/get_run.md) :
+  Get details for a specific run
+- [`get_outputs()`](https://cynkra.github.io/daggleR/reference/get_outputs.md)
+  : Get outputs for a run
+- [`get_step_log()`](https://cynkra.github.io/daggleR/reference/get_step_log.md)
+  : Get log output for a step
+- [`cancel_run()`](https://cynkra.github.io/daggleR/reference/cancel_run.md)
+  : Cancel a running DAG run
+
+## Approval gates
+
+Approve or reject waiting steps.
+
+- [`approve()`](https://cynkra.github.io/daggleR/reference/approve.md) :
+  Approve a waiting step
+- [`reject()`](https://cynkra.github.io/daggleR/reference/reject.md) :
+  Reject a waiting step
+
+## Project management
+
+Register and unregister projects.
+
+- [`list_projects()`](https://cynkra.github.io/daggleR/reference/list_projects.md)
+  : List registered projects
+- [`register_project()`](https://cynkra.github.io/daggleR/reference/register_project.md)
+  : Register a project
+- [`unregister_project()`](https://cynkra.github.io/daggleR/reference/unregister_project.md)
+  : Unregister a project
+
+## System
+
+Health checks, cleanup, and diagnostics.
+
+- [`health()`](https://cynkra.github.io/daggleR/reference/health.md) :
+  Check API health
+- [`cleanup()`](https://cynkra.github.io/daggleR/reference/cleanup.md) :
+  Clean up old runs
+- [`cli_version()`](https://cynkra.github.io/daggleR/reference/cli_version.md)
+  : Get the daggle CLI version
+

@@ -1,0 +1,67 @@
+/* daggle design — forest greens + sap gold, Norse-inspired */
+
+/* Headings: Cinzel serif (loaded via bslib google font) */
+h1, h2, h3, h4, h5, h6,
+.navbar-brand {
+  font-family: 'Cinzel', serif;
+}
+
+/* Accent color: Sap Gold for hover/active states */
+a:hover,
+.navbar .nav-link:hover {
+  color: #D6A84F !important;
+}
+
+/* Navbar active link accent */
+.navbar .nav-link.active {
+  border-bottom: 2px solid #D6A84F;
+}
+
+/* Code blocks: tinted background */
+pre {
+  background-color: #FAFCFB;
+  border: 1px solid #d4ddd7;
+  border-radius: 6px;
+}
+
+/* Aurora Teal for focus rings */
+a:focus,
+button:focus,
+.form-control:focus {
+  outline-color: #4FD1C5;
+  box-shadow: 0 0 0 0.2rem rgba(79, 209, 197, 0.25);
+}
+
+/* Footer styling */
+footer {
+  border-top: 2px solid #2F5D50;
+}
+
+/* Dark mode overrides */
+[data-bs-theme="dark"] pre {
+  background-color: #1B2620;
+  border-color: #2a3d32;
+}
+
+[data-bs-theme="dark"] body {
+  background-color: #121A16;
+  color: #E6F1EC;
+}
+
+[data-bs-theme="dark"] .card,
+[data-bs-theme="dark"] .sidebar {
+  background-color: #1B2620;
+}
+
+[data-bs-theme="dark"] a {
+  color: #3E7C6B;
+}
+
+[data-bs-theme="dark"] a:hover {
+  color: #E6B655 !important;
+}
+
+/* Homepage logo */
+.logo img {
+  max-width: 200px;
+}
