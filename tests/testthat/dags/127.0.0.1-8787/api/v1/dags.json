@@ -1,4 +1,4 @@
 [
-  {"name": "etl", "steps": 3, "schedule": "0 * * * *", "last_status": "success", "last_run": "2024-01-01T00:00:00Z"},
-  {"name": "train", "steps": 5, "schedule": "", "last_status": "running", "last_run": "2024-01-02T00:00:00Z"}
+  {"name": "etl", "steps": 3, "project": "my-project", "schedule": "0 * * * *", "last_status": "success", "last_run": "2024-01-01T00:00:00Z"},
+  {"name": "train", "steps": 5, "project": "(global)", "schedule": "", "last_status": "running", "last_run": "2024-01-02T00:00:00Z"}
 ]

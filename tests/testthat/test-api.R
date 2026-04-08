@@ -1,18 +1,10 @@
 test_that("list_dags() returns a data.frame", {
-  response <- data.frame(
-    name = c("etl", "train"),
-    steps = c(3L, 5L),
-    schedule = c("0 * * * *", ""),
-    last_status = c("success", "running"),
-    last_run = c("2024-01-01T00:00:00Z", "2024-01-02T00:00:00Z"),
-    stringsAsFactors = FALSE
-  )
-
   httptest2::with_mock_dir("dags", {
     result <- list_dags(base_url = "http://127.0.0.1:8787")
     expect_s3_class(result, "data.frame")
-    expect_named(result, c("name", "steps", "schedule", "last_status", "last_run"))
+    expect_named(result, c("name", "steps", "project", "schedule", "last_status", "last_run"))
     expect_equal(nrow(result), 2)
+    expect_equal(result$project, c("my-project", "(global)"))
   })
 })
 
@@ -75,6 +67,37 @@ test_that("cancel_run() returns a list", {
                          base_url = "http://127.0.0.1:8787")
     expect_type(result, "list")
     expect_true("status" %in% names(result))
+  })
+})
+
+test_that("list_projects() returns a data.frame", {
+  httptest2::with_mock_dir("projects", {
+    result <- list_projects(base_url = "http://127.0.0.1:8787")
+    expect_s3_class(result, "data.frame")
+    expect_named(result, c("name", "path", "status", "dags"))
+    expect_equal(nrow(result), 2)
+    expect_equal(result$name[1], "(global)")
+  })
+})
+
+test_that("register_project() returns a list", {
+  httptest2::with_mock_dir("register-project", {
+    result <- register_project(
+      path = "/home/user/new-project",
+      base_url = "http://127.0.0.1:8787"
+    )
+    expect_type(result, "list")
+    expect_equal(result$name, "new-project")
+    expect_equal(result$path, "/home/user/new-project")
+  })
+})
+
+test_that("unregister_project() returns a list", {
+  httptest2::with_mock_dir("unregister-project", {
+    result <- unregister_project("old-project",
+                                 base_url = "http://127.0.0.1:8787")
+    expect_type(result, "list")
+    expect_equal(result$name, "old-project")
   })
 })
 

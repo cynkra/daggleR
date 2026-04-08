@@ -49,6 +49,17 @@ test_that("run_dir() reads DAGGLE_RUN_DIR", {
   expect_equal(run_dir(), "/tmp/runs/abc")
 })
 
+test_that("get_matrix() reads correct env var", {
+  withr::local_envvar(DAGGLE_MATRIX_REGION = "us-east-1")
+  expect_equal(get_matrix("region"), "us-east-1")
+  expect_equal(get_matrix("REGION"), "us-east-1")
+})
+
+test_that("get_matrix() returns empty string when unset", {
+  withr::local_envvar(DAGGLE_MATRIX_MISSING = NA)
+  expect_equal(get_matrix("missing"), "")
+})
+
 test_that("get_output() reads correct env var", {
   withr::local_envvar(DAGGLE_OUTPUT_FIT_LDA_ACCURACY = "0.95")
   expect_equal(get_output("fit-lda", "accuracy"), "0.95")
