@@ -28,11 +28,14 @@ daggleR::run_dir()
 
 # Read an output from a completed upstream step
 accuracy <- daggleR::get_output("fit-lda", "accuracy")
+
+# Read a matrix parameter (for matrix steps)
+region <- daggleR::get_matrix("region")
 ```
 
 ### API wrappers
 
-These functions talk to a running daggle API server (`daggle serve --port 8787`).
+These functions talk to a running daggle API server (`daggle serve`).
 
 ```r
 # List all DAGs
@@ -58,13 +61,26 @@ daggleR::reject("etl", run_id = "run-001", step_id = "deploy")
 daggleR::health()
 ```
 
+### Project management
+
+```r
+# List registered projects
+daggleR::list_projects()
+
+# Register a project
+daggleR::register_project("/path/to/my-project")
+
+# Unregister a project
+daggleR::unregister_project("my-project")
+```
+
 ### Base URL configuration
 
 API functions resolve the base URL in this order:
 
 1. Explicit `base_url` parameter
 2. `DAGGLE_API_URL` environment variable
-3. Default: `http://127.0.0.1:8787`
+3. Default: `http://127.0.0.1:9090`
 
 ```r
 # Use a custom URL
