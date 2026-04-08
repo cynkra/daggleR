@@ -10,7 +10,7 @@ list_dags(base_url = NULL)
 \item{base_url}{Base URL of the daggle API. See Details.}
 }
 \value{
-A data.frame with columns: \code{name}, \code{steps}, \code{schedule},
+A data.frame with columns: \code{name}, \code{steps}, \code{project}, \code{schedule},
 \code{last_status}, \code{last_run}.
 }
 \description{
@@ -18,5 +18,5 @@ List all DAGs
 }
 \details{
 The base URL is resolved in order: explicit \code{base_url} parameter,
-\code{DAGGLE_API_URL} environment variable, default \verb{http://127.0.0.1:8787}.
+\code{DAGGLE_API_URL} environment variable, default \verb{http://127.0.0.1:9090}.
 }

@@ -62,6 +62,23 @@ run_dir <- function() {
   Sys.getenv("DAGGLE_RUN_DIR")
 }
 
+#' Get a matrix parameter value
+#'
+#' Reads the value of a matrix parameter for the current step. Matrix steps
+#' receive `DAGGLE_MATRIX_<KEY>` environment variables with the key uppercased.
+#'
+#' @param key Character string. The matrix parameter name (e.g., `"region"`).
+#'
+#' @return Character string with the matrix value, or `""` if not set.
+#' @export
+#' @examples
+#' \dontrun{
+#' region <- get_matrix("region")
+#' }
+get_matrix <- function(key) {
+  Sys.getenv(paste0("DAGGLE_MATRIX_", toupper(key)))
+}
+
 #' Read an output from a completed upstream step
 #'
 #' Reads the value of an output emitted by a completed upstream step via

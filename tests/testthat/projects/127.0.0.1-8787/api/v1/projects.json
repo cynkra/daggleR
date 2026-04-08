@@ -1,0 +1,4 @@
+[
+  {"name": "(global)", "path": "~/.daggle/dags", "status": "ok", "dags": 2},
+  {"name": "my-project", "path": "/home/user/my-project", "status": "ok", "dags": 3}
+]

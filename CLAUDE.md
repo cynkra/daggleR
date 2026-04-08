@@ -7,8 +7,10 @@ Companion R package for [daggle](https://github.com/cynkra/daggle), a lightweigh
 Thin wrappers around the daggle protocol. Three categories:
 
 1. **In-step helpers** — used inside R steps run by daggle. No network, no daggle binary needed.
-2. **API wrappers** — talk to the daggle REST API (`daggle serve --port 8787`). Require `httr2`.
+2. **API wrappers** — talk to the daggle REST API (`daggle serve --port 9090`). Require `httr2`.
 3. **Approval helpers** — approve/reject waiting steps via API.
+4. **Project management** — register/unregister projects via API.
+5. **CLI helpers** — shell out to the daggle binary for diagnostics.
 
 ## Package structure
 
@@ -73,10 +75,20 @@ get_output <- function(step, key) {
 - Key: uppercased
 - Prefix: `DAGGLE_OUTPUT_`
 
+#### `daggle::get_matrix(key)`
+Read a matrix parameter for the current step.
+```r
+get_matrix <- function(key) {
+  Sys.getenv(paste0("DAGGLE_MATRIX_", toupper(key)))
+}
+```
+
+**Naming convention:** Matrix key "region" becomes env var `DAGGLE_MATRIX_REGION`.
+
 ### API wrappers (require httr2, require running daggle API)
 
 All API wrappers should:
-- Accept `base_url` parameter (default: `Sys.getenv("DAGGLE_API_URL", "http://127.0.0.1:8787")`)
+- Accept `base_url` parameter (default: `Sys.getenv("DAGGLE_API_URL", "http://127.0.0.1:9090")`)
 - Return tibbles/data.frames where possible (list endpoints return flat arrays)
 - Use `httr2::request() |> req_perform() |> resp_body_json()` pattern
 - Error with clear message on HTTP errors
@@ -85,7 +97,7 @@ All API wrappers should:
 ```
 GET /api/v1/dags
 ```
-Returns data.frame with columns: `name`, `steps`, `schedule`, `last_status`, `last_run`
+Returns data.frame with columns: `name`, `steps`, `project`, `schedule`, `last_status`, `last_run`
 
 #### `daggle::get_dag(name, base_url = NULL)`
 ```
@@ -146,6 +158,30 @@ POST /api/v1/dags/{name}/runs/{run_id}/steps/{step_id}/reject
 ```
 Returns list with: `step_id`, `status`
 
+#### `daggle::list_projects(base_url = NULL)`
+```
+GET /api/v1/projects
+```
+Returns data.frame with columns: `name`, `path`, `status`, `dags`
+
+The first row is always `(global)` (the global dags directory). Status is `"ok"` or `"missing"`.
+
+#### `daggle::register_project(path, name = NULL, base_url = NULL)`
+```
+POST /api/v1/projects
+Body: {"path": "/absolute/path/to/project", "name": "optional-name"}
+```
+- `name` defaults to directory basename on the server side if omitted
+- Returns list with: `name`, `path`
+- 409 Conflict if name or path already registered, or DAG name collision
+
+#### `daggle::unregister_project(name, base_url = NULL)`
+```
+DELETE /api/v1/projects/{name}
+```
+- Returns list with: `name`
+- 404 if project not found
+
 #### `daggle::health(base_url = NULL)`
 ```
 GET /api/v1/health
@@ -182,16 +218,21 @@ HTTP status codes: 200, 201, 400, 404, 409, 500.
 All API functions should resolve the base URL in this order:
 1. Explicit `base_url` parameter
 2. `DAGGLE_API_URL` environment variable
-3. Default: `http://127.0.0.1:8787`
+3. Default: `http://127.0.0.1:9090`
 
 Helper:
 ```r
 resolve_base_url <- function(base_url = NULL) {
   if (!is.null(base_url)) return(base_url)
-  url <- Sys.getenv("DAGGLE_API_URL", "http://127.0.0.1:8787")
+  url <- Sys.getenv("DAGGLE_API_URL", "http://127.0.0.1:9090")
   sub("/+$", "", url)  # strip trailing slash
 }
 ```
+
+## CLI helpers
+
+#### `daggle::cli_version()`
+Shells out to `daggle version` and returns the version string. Errors if `daggle` is not on PATH.
 
 ## Testing strategy
 

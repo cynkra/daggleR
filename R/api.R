@@ -4,9 +4,9 @@
 #'
 #' @details
 #' The base URL is resolved in order: explicit `base_url` parameter,
-#' `DAGGLE_API_URL` environment variable, default `http://127.0.0.1:8787`.
+#' `DAGGLE_API_URL` environment variable, default `http://127.0.0.1:9090`.
 #'
-#' @return A data.frame with columns: `name`, `steps`, `schedule`,
+#' @return A data.frame with columns: `name`, `steps`, `project`, `schedule`,
 #'   `last_status`, `last_run`.
 #' @export
 list_dags <- function(base_url = NULL) {
@@ -177,6 +177,57 @@ reject <- function(name, run_id, step_id, base_url = NULL) {
       "api", "v1", "dags", name, "runs", run_id, "steps", step_id, "reject"
     ) |>
     httr2::req_method("POST") |>
+    httr2::req_perform() |>
+    httr2::resp_body_json()
+}
+
+#' List registered projects
+#'
+#' @inheritParams list_dags
+#'
+#' @return A data.frame with columns: `name`, `path`, `status`, `dags`.
+#' @export
+list_projects <- function(base_url = NULL) {
+  url <- resolve_base_url(base_url)
+  httr2::request(url) |>
+    httr2::req_url_path_append("api", "v1", "projects") |>
+    httr2::req_perform() |>
+    httr2::resp_body_json(simplifyVector = TRUE)
+}
+
+#' Register a project
+#'
+#' @param path Character string. Absolute path to the project directory.
+#' @param name Character string or `NULL`. Optional project name; defaults to
+#'   the directory basename on the server side.
+#' @inheritParams list_dags
+#'
+#' @return A list with elements: `name`, `path`.
+#' @export
+register_project <- function(path, name = NULL, base_url = NULL) {
+  url <- resolve_base_url(base_url)
+  body <- list(path = path)
+  if (!is.null(name)) body$name <- name
+  httr2::request(url) |>
+    httr2::req_url_path_append("api", "v1", "projects") |>
+    httr2::req_body_json(body) |>
+    httr2::req_method("POST") |>
+    httr2::req_perform() |>
+    httr2::resp_body_json()
+}
+
+#' Unregister a project
+#'
+#' @param name Character string. Name of the project to unregister.
+#' @inheritParams list_dags
+#'
+#' @return A list with element: `name`.
+#' @export
+unregister_project <- function(name, base_url = NULL) {
+  url <- resolve_base_url(base_url)
+  httr2::request(url) |>
+    httr2::req_url_path_append("api", "v1", "projects", name) |>
+    httr2::req_method("DELETE") |>
     httr2::req_perform() |>
     httr2::resp_body_json()
 }

@@ -14,6 +14,6 @@ Character string with trailing slashes removed.
 }
 \description{
 Resolves the base URL in order: explicit parameter, \code{DAGGLE_API_URL}
-environment variable, default \verb{http://127.0.0.1:8787}.
+environment variable, default \verb{http://127.0.0.1:9090}.
 }
 \keyword{internal}
