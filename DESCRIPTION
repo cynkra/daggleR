@@ -1,6 +1,6 @@
 Package: daggleR
 Title: R Interface to the Daggle DAG Scheduler
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: person("David", "Schoch", role = c("aut", "cre"),
     email = "david@schochastics.net")
 Description: Companion R package for daggle, a lightweight DAG scheduler for R.
