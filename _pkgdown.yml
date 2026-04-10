@@ -53,12 +53,19 @@ reference:
       - run_dir
       - get_matrix
       - get_output
+      - summary_md
+      - meta_numeric
+      - meta_text
+      - meta_table
+      - meta_image
+      - validation
 
   - title: DAG management
     desc: List and inspect DAGs.
     contents:
       - list_dags
       - get_dag
+      - plan
 
   - title: Run management
     desc: Trigger, inspect, and cancel DAG runs.
@@ -69,6 +76,11 @@ reference:
       - get_outputs
       - get_step_log
       - cancel_run
+      - compare_runs
+      - list_artifacts
+      - get_summaries
+      - get_metadata
+      - get_validations
 
   - title: Approval gates
     desc: Approve or reject waiting steps.
