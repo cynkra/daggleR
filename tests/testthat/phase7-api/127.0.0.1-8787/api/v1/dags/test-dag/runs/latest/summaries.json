@@ -1,0 +1,4 @@
+[
+  {"step_id": "extract", "format": "markdown", "content": "## Extract\n- 1542 rows"},
+  {"step_id": "transform", "format": "markdown", "content": "## Transform\n- 3 outliers removed"}
+]

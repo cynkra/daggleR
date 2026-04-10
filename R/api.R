@@ -262,3 +262,116 @@ cleanup <- function(older_than = "30d", base_url = NULL) {
     httr2::req_perform() |>
     httr2::resp_body_json()
 }
+
+#' List artifacts for a run
+#'
+#' @param name Character string. Name of the DAG.
+#' @param run_id Character string. Run ID, or `"latest"` for the most recent.
+#' @inheritParams list_dags
+#'
+#' @return A data.frame with columns: `step_id`, `name`, `path`, `abs_path`,
+#'   `hash`, `size`, `format`.
+#' @export
+list_artifacts <- function(name, run_id = "latest", base_url = NULL) {
+  url <- resolve_base_url(base_url)
+  httr2::request(url) |>
+    httr2::req_url_path_append(
+      "api", "v1", "dags", name, "runs", run_id, "artifacts"
+    ) |>
+    httr2::req_perform() |>
+    httr2::resp_body_json(simplifyVector = TRUE)
+}
+
+#' Show execution plan with cache status
+#'
+#' Returns which steps would run vs skip based on the current cache state.
+#'
+#' @param name Character string. Name of the DAG.
+#' @inheritParams list_dags
+#'
+#' @return A data.frame with columns: `step_id`, `status`, `reason`.
+#' @export
+plan <- function(name, base_url = NULL) {
+  url <- resolve_base_url(base_url)
+  httr2::request(url) |>
+    httr2::req_url_path_append("api", "v1", "dags", name, "plan") |>
+    httr2::req_perform() |>
+    httr2::resp_body_json(simplifyVector = TRUE)
+}
+
+#' Get step summaries for a run
+#'
+#' @param name Character string. Name of the DAG.
+#' @param run_id Character string. Run ID, or `"latest"` for the most recent.
+#' @inheritParams list_dags
+#'
+#' @return A data.frame with columns: `step_id`, `format`, `content`.
+#' @export
+get_summaries <- function(name, run_id = "latest", base_url = NULL) {
+  url <- resolve_base_url(base_url)
+  httr2::request(url) |>
+    httr2::req_url_path_append(
+      "api", "v1", "dags", name, "runs", run_id, "summaries"
+    ) |>
+    httr2::req_perform() |>
+    httr2::resp_body_json(simplifyVector = TRUE)
+}
+
+#' Get step metadata for a run
+#'
+#' @param name Character string. Name of the DAG.
+#' @param run_id Character string. Run ID, or `"latest"` for the most recent.
+#' @inheritParams list_dags
+#'
+#' @return A data.frame with columns: `step_id`, `name`, `type`, `value`.
+#' @export
+get_metadata <- function(name, run_id = "latest", base_url = NULL) {
+  url <- resolve_base_url(base_url)
+  httr2::request(url) |>
+    httr2::req_url_path_append(
+      "api", "v1", "dags", name, "runs", run_id, "metadata"
+    ) |>
+    httr2::req_perform() |>
+    httr2::resp_body_json(simplifyVector = TRUE)
+}
+
+#' Get validation results for a run
+#'
+#' @param name Character string. Name of the DAG.
+#' @param run_id Character string. Run ID, or `"latest"` for the most recent.
+#' @inheritParams list_dags
+#'
+#' @return A data.frame with columns: `step_id`, `name`, `status`, `message`.
+#' @export
+get_validations <- function(name, run_id = "latest", base_url = NULL) {
+  url <- resolve_base_url(base_url)
+  httr2::request(url) |>
+    httr2::req_url_path_append(
+      "api", "v1", "dags", name, "runs", run_id, "validations"
+    ) |>
+    httr2::req_perform() |>
+    httr2::resp_body_json(simplifyVector = TRUE)
+}
+
+#' Compare two runs
+#'
+#' @param name Character string. Name of the DAG.
+#' @param run1 Character string. First run ID.
+#' @param run2 Character string. Second run ID.
+#' @inheritParams list_dags
+#'
+#' @return A list with elements: `outputs_diff` (data.frame with columns
+#'   `step_id`, `key`, `value1`, `value2`), `duration_diff` (list with
+#'   `run1_seconds`, `run2_seconds`, `diff_seconds`), `meta_diff` (list with
+#'   `dag_hash1`, `dag_hash2`, `changed`).
+#' @export
+compare_runs <- function(name, run1, run2, base_url = NULL) {
+  url <- resolve_base_url(base_url)
+  httr2::request(url) |>
+    httr2::req_url_path_append(
+      "api", "v1", "dags", name, "runs", "compare"
+    ) |>
+    httr2::req_url_query(run1 = run1, run2 = run2) |>
+    httr2::req_perform() |>
+    httr2::resp_body_json()
+}
