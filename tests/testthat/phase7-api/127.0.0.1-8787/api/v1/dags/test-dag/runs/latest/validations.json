@@ -1,0 +1,4 @@
+[
+  {"step_id": "extract", "name": "row_count", "status": "pass", "message": "Expected > 0, got 1542"},
+  {"step_id": "transform", "name": "missing_pct", "status": "warn", "message": "12% missing (threshold: 20%)"}
+]

@@ -1,0 +1,15 @@
+{
+  "outputs_diff": [
+    {"step_id": "extract", "key": "row_count", "value1": "1000", "value2": "1542"}
+  ],
+  "duration_diff": {
+    "run1_seconds": 45.2,
+    "run2_seconds": 38.7,
+    "diff_seconds": -6.5
+  },
+  "meta_diff": {
+    "dag_hash1": "abc123",
+    "dag_hash2": "def456",
+    "changed": true
+  }
+}

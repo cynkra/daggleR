@@ -1,0 +1,5 @@
+[
+  {"step_id": "extract", "status": "run", "reason": "input changed"},
+  {"step_id": "transform", "status": "skip", "reason": "cached"},
+  {"step_id": "load", "status": "run", "reason": "upstream changed"}
+]

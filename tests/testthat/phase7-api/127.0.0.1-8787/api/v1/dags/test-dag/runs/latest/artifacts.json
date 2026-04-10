@@ -1,0 +1,4 @@
+[
+  {"step_id": "extract", "name": "raw.csv", "path": "artifacts/raw.csv", "abs_path": "/tmp/runs/r1/artifacts/raw.csv", "hash": "abc123", "size": 1024, "format": "csv"},
+  {"step_id": "transform", "name": "clean.parquet", "path": "artifacts/clean.parquet", "abs_path": "/tmp/runs/r1/artifacts/clean.parquet", "hash": "def456", "size": 2048, "format": "parquet"}
+]

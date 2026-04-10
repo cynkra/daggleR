@@ -1,0 +1,4 @@
+[
+  {"step_id": "extract", "name": "row_count", "type": "numeric", "value": "1542"},
+  {"step_id": "transform", "name": "model_type", "type": "text", "value": "linear regression"}
+]
