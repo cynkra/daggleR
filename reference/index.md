@@ -17,6 +17,18 @@ or daggle binary needed.
   : Get a matrix parameter value
 - [`get_output()`](https://cynkra.github.io/daggleR/reference/get_output.md)
   : Read an output from a completed upstream step
+- [`summary_md()`](https://cynkra.github.io/daggleR/reference/summary_md.md)
+  : Emit a markdown summary for the current step
+- [`meta_numeric()`](https://cynkra.github.io/daggleR/reference/meta_numeric.md)
+  : Emit a numeric metadata value
+- [`meta_text()`](https://cynkra.github.io/daggleR/reference/meta_text.md)
+  : Emit a text metadata value
+- [`meta_table()`](https://cynkra.github.io/daggleR/reference/meta_table.md)
+  : Emit a table metadata value
+- [`meta_image()`](https://cynkra.github.io/daggleR/reference/meta_image.md)
+  : Emit an image metadata reference
+- [`validation()`](https://cynkra.github.io/daggleR/reference/validation.md)
+  : Emit a validation result
 
 ## DAG management
 
@@ -26,6 +38,8 @@ List and inspect DAGs.
   : List all DAGs
 - [`get_dag()`](https://cynkra.github.io/daggleR/reference/get_dag.md) :
   Get details for a single DAG
+- [`plan()`](https://cynkra.github.io/daggleR/reference/plan.md) : Show
+  execution plan with cache status
 
 ## Run management
 
@@ -43,6 +57,16 @@ Trigger, inspect, and cancel DAG runs.
   : Get log output for a step
 - [`cancel_run()`](https://cynkra.github.io/daggleR/reference/cancel_run.md)
   : Cancel a running DAG run
+- [`compare_runs()`](https://cynkra.github.io/daggleR/reference/compare_runs.md)
+  : Compare two runs
+- [`list_artifacts()`](https://cynkra.github.io/daggleR/reference/list_artifacts.md)
+  : List artifacts for a run
+- [`get_summaries()`](https://cynkra.github.io/daggleR/reference/get_summaries.md)
+  : Get step summaries for a run
+- [`get_metadata()`](https://cynkra.github.io/daggleR/reference/get_metadata.md)
+  : Get step metadata for a run
+- [`get_validations()`](https://cynkra.github.io/daggleR/reference/get_validations.md)
+  : Get validation results for a run
 
 ## Approval gates
 

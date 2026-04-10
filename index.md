@@ -13,7 +13,7 @@ pak::pak("cynkra/daggleR")
 
 ## Usage
 
-### In-step helpers
+### In-step helpers (12 functions)
 
 These functions are used inside R steps executed by daggle. They require
 no network access and no daggle binary.
@@ -32,9 +32,22 @@ accuracy <- daggleR::get_output("fit-lda", "accuracy")
 
 # Read a matrix parameter (for matrix steps)
 region <- daggleR::get_matrix("region")
+
+# Emit a markdown summary for the step
+daggleR::summary_md("## Results\n- 1542 rows processed")
+
+# Emit typed metadata
+daggleR::meta_numeric("row_count", nrow(df))
+daggleR::meta_text("model_type", "linear regression")
+daggleR::meta_table("top5", head(results, 5))
+daggleR::meta_image("residuals_plot", "output/residuals.png")
+
+# Emit validation results
+daggleR::validation("row_count", "pass", "Expected > 0, got 1542")
+daggleR::validation("schema", "fail", "Column 'date' expected date, got character")
 ```
 
-### API wrappers
+### API wrappers (23 functions)
 
 These functions talk to a running daggle API server (`daggle serve`).
 
@@ -57,6 +70,18 @@ daggleR::get_step_log("etl", run_id = "run-001", step_id = "extract")
 # Approval gates
 daggleR::approve("etl", run_id = "run-001", step_id = "deploy")
 daggleR::reject("etl", run_id = "run-001", step_id = "deploy")
+
+# Show execution plan with cache status
+daggleR::plan("etl")
+
+# List artifacts, summaries, metadata, and validations
+daggleR::list_artifacts("etl", run_id = "latest")
+daggleR::get_summaries("etl", run_id = "latest")
+daggleR::get_metadata("etl", run_id = "latest")
+daggleR::get_validations("etl", run_id = "latest")
+
+# Compare two runs
+daggleR::compare_runs("etl", run1 = "run-001", run2 = "run-002")
 
 # Health check
 daggleR::health()
