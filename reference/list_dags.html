@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">daggleR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,21 +43,35 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">list_dags</span><span class="op">(</span>base_url <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">list_dags</span><span class="op">(</span>tag <span class="op">=</span> <span class="cn">NULL</span>, team <span class="op">=</span> <span class="cn">NULL</span>, owner <span class="op">=</span> <span class="cn">NULL</span>, base_url <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-base-url">base_url<a class="anchor" aria-label="anchor" href="#arg-base-url"></a></dt>
+<dl><dt id="arg-tag">tag<a class="anchor" aria-label="anchor" href="#arg-tag"></a></dt>
+<dd><p>Character string. If set, only return DAGs that declare this tag.</p></dd>
+
+
+<dt id="arg-team">team<a class="anchor" aria-label="anchor" href="#arg-team"></a></dt>
+<dd><p>Character string. If set, only return DAGs owned by this team.</p></dd>
+
+
+<dt id="arg-owner">owner<a class="anchor" aria-label="anchor" href="#arg-owner"></a></dt>
+<dd><p>Character string. If set, only return DAGs owned by this user.</p></dd>
+
+
+<dt id="arg-base-url">base_url<a class="anchor" aria-label="anchor" href="#arg-base-url"></a></dt>
 <dd><p>Base URL of the daggle API. See Details.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data.frame with columns: <code>name</code>, <code>steps</code>, <code>project</code>, <code>schedule</code>,
-<code>last_status</code>, <code>last_run</code>.</p>
+    <p>A data.frame with one row per DAG. Always includes <code>name</code>, <code>steps</code>,
+<code>project</code>, <code>schedule</code>, <code>last_status</code>, <code>last_run</code>. May also include
+<code>owner</code>, <code>team</code>, <code>description</code>, and <code>tags</code> columns when any DAG declares
+those fields. The <code>tags</code> column is a list-column of character vectors.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>

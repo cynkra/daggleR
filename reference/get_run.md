@@ -24,6 +24,10 @@ get_run(name, run_id = "latest", base_url = NULL)
 
 ## Value
 
-A list with elements: `run_id`, `dag_name`, `status`, `started`,
-`ended`, `duration_seconds`, `dag_hash`, `r_version`, `platform`,
-`params`, `steps`.
+A list describing the run. Includes `run_id`, `dag_name`, `status`,
+`started`, `ended`, `duration_seconds`, `dag_hash`, `r_version`,
+`platform`, `params`, `steps`. The `steps` element is a data.frame that
+may include resource columns `peak_rss_kb` (int), `user_cpu_sec` (num),
+`sys_cpu_sec` (num). The run also carries an `annotations` element
+(data.frame of `timestamp`, `author`, `note`) when notes have been
+attached.

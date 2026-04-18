@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">daggleR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,9 +64,13 @@
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A list with elements: <code>run_id</code>, <code>dag_name</code>, <code>status</code>, <code>started</code>,
-<code>ended</code>, <code>duration_seconds</code>, <code>dag_hash</code>, <code>r_version</code>, <code>platform</code>,
-<code>params</code>, <code>steps</code>.</p>
+    <p>A list describing the run. Includes <code>run_id</code>, <code>dag_name</code>, <code>status</code>,
+<code>started</code>, <code>ended</code>, <code>duration_seconds</code>, <code>dag_hash</code>, <code>r_version</code>,
+<code>platform</code>, <code>params</code>, <code>steps</code>. The <code>steps</code> element is a data.frame that
+may include resource columns <code>peak_rss_kb</code> (int), <code>user_cpu_sec</code> (num),
+<code>sys_cpu_sec</code> (num). The run also carries an <code>annotations</code> element
+(data.frame of <code>timestamp</code>, <code>author</code>, <code>note</code>) when notes have been
+attached.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

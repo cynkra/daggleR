@@ -47,7 +47,7 @@ daggleR::validation("row_count", "pass", "Expected > 0, got 1542")
 daggleR::validation("schema", "fail", "Column 'date' expected date, got character")
 ```
 
-### API wrappers (23 functions)
+### API wrappers (26 functions)
 
 These functions talk to a running daggle API server (`daggle serve`).
 
@@ -82,6 +82,18 @@ daggleR::get_validations("etl", run_id = "latest")
 
 # Compare two runs
 daggleR::compare_runs("etl", run1 = "run-001", run2 = "run-002")
+
+# Filter DAGs by ownership metadata
+daggleR::list_dags(tag = "etl", team = "data")
+
+# See who depends on this DAG
+impact <- daggleR::get_impact("etl")
+impact$downstream_dags
+impact$exposures
+
+# Attach a post-mortem note to a run
+daggleR::add_annotation("etl", "run-001", "DB was down - manual restart at 08:30")
+daggleR::list_annotations("etl", "run-001")
 
 # Health check
 daggleR::health()

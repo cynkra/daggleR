@@ -2,6 +2,7 @@
 <url><loc>https://cynkra.github.io/daggleR/404.html</loc></url>
 <url><loc>https://cynkra.github.io/daggleR/authors.html</loc></url>
 <url><loc>https://cynkra.github.io/daggleR/index.html</loc></url>
+<url><loc>https://cynkra.github.io/daggleR/reference/add_annotation.html</loc></url>
 <url><loc>https://cynkra.github.io/daggleR/reference/approve.html</loc></url>
 <url><loc>https://cynkra.github.io/daggleR/reference/cancel_run.html</loc></url>
 <url><loc>https://cynkra.github.io/daggleR/reference/cleanup.html</loc></url>
@@ -9,6 +10,7 @@
 <url><loc>https://cynkra.github.io/daggleR/reference/compare_runs.html</loc></url>
 <url><loc>https://cynkra.github.io/daggleR/reference/dag_name.html</loc></url>
 <url><loc>https://cynkra.github.io/daggleR/reference/get_dag.html</loc></url>
+<url><loc>https://cynkra.github.io/daggleR/reference/get_impact.html</loc></url>
 <url><loc>https://cynkra.github.io/daggleR/reference/get_matrix.html</loc></url>
 <url><loc>https://cynkra.github.io/daggleR/reference/get_metadata.html</loc></url>
 <url><loc>https://cynkra.github.io/daggleR/reference/get_output.html</loc></url>
@@ -19,6 +21,7 @@
 <url><loc>https://cynkra.github.io/daggleR/reference/get_validations.html</loc></url>
 <url><loc>https://cynkra.github.io/daggleR/reference/health.html</loc></url>
 <url><loc>https://cynkra.github.io/daggleR/reference/index.html</loc></url>
+<url><loc>https://cynkra.github.io/daggleR/reference/list_annotations.html</loc></url>
 <url><loc>https://cynkra.github.io/daggleR/reference/list_artifacts.html</loc></url>
 <url><loc>https://cynkra.github.io/daggleR/reference/list_dags.html</loc></url>
 <url><loc>https://cynkra.github.io/daggleR/reference/list_projects.html</loc></url>

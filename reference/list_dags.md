@@ -5,10 +5,22 @@ List all DAGs
 ## Usage
 
 ``` r
-list_dags(base_url = NULL)
+list_dags(tag = NULL, team = NULL, owner = NULL, base_url = NULL)
 ```
 
 ## Arguments
+
+- tag:
+
+  Character string. If set, only return DAGs that declare this tag.
+
+- team:
+
+  Character string. If set, only return DAGs owned by this team.
+
+- owner:
+
+  Character string. If set, only return DAGs owned by this user.
 
 - base_url:
 
@@ -16,8 +28,10 @@ list_dags(base_url = NULL)
 
 ## Value
 
-A data.frame with columns: `name`, `steps`, `project`, `schedule`,
-`last_status`, `last_run`.
+A data.frame with one row per DAG. Always includes `name`, `steps`,
+`project`, `schedule`, `last_status`, `last_run`. May also include
+`owner`, `team`, `description`, and `tags` columns when any DAG declares
+those fields. The `tags` column is a list-column of character vectors.
 
 ## Details
 

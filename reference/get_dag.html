@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">daggleR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,8 +60,12 @@
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A list with elements: <code>name</code>, <code>steps</code>, <code>step_ids</code>, <code>schedule</code>,
-<code>workdir</code>, <code>r_version</code>, <code>last_status</code>, <code>last_run_id</code>, <code>last_run</code>.</p>
+    <p>A list with the DAG definition and latest run status. Always
+includes <code>name</code>, <code>steps</code>, <code>step_ids</code>, <code>schedule</code>, <code>workdir</code>, <code>r_version</code>,
+<code>last_status</code>, <code>last_run_id</code>, <code>last_run</code>. May also include optional
+fields <code>owner</code>, <code>team</code>, <code>description</code>, <code>tags</code>, and <code>exposures</code>
+(a data.frame with <code>name</code>, <code>type</code>, <code>url</code>, <code>description</code>) when declared
+on the DAG.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

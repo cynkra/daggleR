@@ -40,6 +40,8 @@ List and inspect DAGs.
   Get details for a single DAG
 - [`plan()`](https://cynkra.github.io/daggleR/reference/plan.md) : Show
   execution plan with cache status
+- [`get_impact()`](https://cynkra.github.io/daggleR/reference/get_impact.md)
+  : Get downstream impact of a DAG
 
 ## Run management
 
@@ -67,6 +69,10 @@ Trigger, inspect, and cancel DAG runs.
   : Get step metadata for a run
 - [`get_validations()`](https://cynkra.github.io/daggleR/reference/get_validations.md)
   : Get validation results for a run
+- [`list_annotations()`](https://cynkra.github.io/daggleR/reference/list_annotations.md)
+  : List annotations for a run
+- [`add_annotation()`](https://cynkra.github.io/daggleR/reference/add_annotation.md)
+  : Add an annotation to a run
 
 ## Approval gates
 

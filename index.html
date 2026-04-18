@@ -35,7 +35,7 @@
 
     <a class="navbar-brand me-2" href="index.html">daggleR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -115,7 +115,7 @@
 <span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/validation.html">validation</a></span><span class="op">(</span><span class="st">"schema"</span>, <span class="st">"fail"</span>, <span class="st">"Column 'date' expected date, got character"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="api-wrappers-23-functions">API wrappers (23 functions)<a class="anchor" aria-label="anchor" href="#api-wrappers-23-functions"></a>
+<h3 id="api-wrappers-26-functions">API wrappers (26 functions)<a class="anchor" aria-label="anchor" href="#api-wrappers-26-functions"></a>
 </h3>
 <p>These functions talk to a running daggle API server (<code>daggle serve</code>).</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -149,6 +149,18 @@
 <span></span>
 <span><span class="co"># Compare two runs</span></span>
 <span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/compare_runs.html">compare_runs</a></span><span class="op">(</span><span class="st">"etl"</span>, run1 <span class="op">=</span> <span class="st">"run-001"</span>, run2 <span class="op">=</span> <span class="st">"run-002"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Filter DAGs by ownership metadata</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/list_dags.html">list_dags</a></span><span class="op">(</span>tag <span class="op">=</span> <span class="st">"etl"</span>, team <span class="op">=</span> <span class="st">"data"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># See who depends on this DAG</span></span>
+<span><span class="va">impact</span> <span class="op">&lt;-</span> <span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/get_impact.html">get_impact</a></span><span class="op">(</span><span class="st">"etl"</span><span class="op">)</span></span>
+<span><span class="va">impact</span><span class="op">$</span><span class="va">downstream_dags</span></span>
+<span><span class="va">impact</span><span class="op">$</span><span class="va">exposures</span></span>
+<span></span>
+<span><span class="co"># Attach a post-mortem note to a run</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/add_annotation.html">add_annotation</a></span><span class="op">(</span><span class="st">"etl"</span>, <span class="st">"run-001"</span>, <span class="st">"DB was down - manual restart at 08:30"</span><span class="op">)</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/list_annotations.html">list_annotations</a></span><span class="op">(</span><span class="st">"etl"</span>, <span class="st">"run-001"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Health check</span></span>
 <span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/health.html">health</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
