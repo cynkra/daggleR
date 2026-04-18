@@ -1,0 +1,11 @@
+{
+  "dag": "test-dag",
+  "downstream_dags": [
+    {"name": "reporting", "project": "data", "trigger_on_status": "success"},
+    {"name": "alerts", "project": "ops", "trigger_on_status": "failure"}
+  ],
+  "exposures": [
+    {"name": "exec-dashboard", "type": "dashboard", "url": "https://grafana.internal/d/exec", "description": "Executive KPI dashboard"},
+    {"name": "daily-report", "type": "report", "url": "https://reports.internal/daily", "description": "Daily stakeholder email"}
+  ]
+}

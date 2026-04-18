@@ -14,9 +14,13 @@ get_run(name, run_id = "latest", base_url = NULL)
 \item{base_url}{Base URL of the daggle API. See Details.}
 }
 \value{
-A list with elements: \code{run_id}, \code{dag_name}, \code{status}, \code{started},
-\code{ended}, \code{duration_seconds}, \code{dag_hash}, \code{r_version}, \code{platform},
-\code{params}, \code{steps}.
+A list describing the run. Includes \code{run_id}, \code{dag_name}, \code{status},
+\code{started}, \code{ended}, \code{duration_seconds}, \code{dag_hash}, \code{r_version},
+\code{platform}, \code{params}, \code{steps}. The \code{steps} element is a data.frame that
+may include resource columns \code{peak_rss_kb} (int), \code{user_cpu_sec} (num),
+\code{sys_cpu_sec} (num). The run also carries an \code{annotations} element
+(data.frame of \code{timestamp}, \code{author}, \code{note}) when notes have been
+attached.
 }
 \description{
 Get details for a specific run

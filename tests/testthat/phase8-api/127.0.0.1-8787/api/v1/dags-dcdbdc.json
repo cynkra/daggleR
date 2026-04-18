@@ -1,0 +1,4 @@
+[
+  {"name": "daily-etl", "steps": 4, "project": "data", "schedule": "0 2 * * *", "last_status": "success", "last_run": "2026-04-17T02:00:00Z", "owner": "alice", "team": "data", "description": "Nightly ETL", "tags": ["etl", "nightly"]},
+  {"name": "hourly-etl", "steps": 2, "project": "data", "schedule": "0 * * * *", "last_status": "success", "last_run": "2026-04-18T11:00:00Z", "owner": "bob", "team": "data", "description": "Hourly rollups", "tags": ["etl"]}
+]
