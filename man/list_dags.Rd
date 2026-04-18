@@ -4,14 +4,22 @@
 \alias{list_dags}
 \title{List all DAGs}
 \usage{
-list_dags(base_url = NULL)
+list_dags(tag = NULL, team = NULL, owner = NULL, base_url = NULL)
 }
 \arguments{
+\item{tag}{Character string. If set, only return DAGs that declare this tag.}
+
+\item{team}{Character string. If set, only return DAGs owned by this team.}
+
+\item{owner}{Character string. If set, only return DAGs owned by this user.}
+
 \item{base_url}{Base URL of the daggle API. See Details.}
 }
 \value{
-A data.frame with columns: \code{name}, \code{steps}, \code{project}, \code{schedule},
-\code{last_status}, \code{last_run}.
+A data.frame with one row per DAG. Always includes \code{name}, \code{steps},
+\code{project}, \code{schedule}, \code{last_status}, \code{last_run}. May also include
+\code{owner}, \code{team}, \code{description}, and \code{tags} columns when any DAG declares
+those fields. The \code{tags} column is a list-column of character vectors.
 }
 \description{
 List all DAGs

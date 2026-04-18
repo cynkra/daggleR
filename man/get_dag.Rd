@@ -12,8 +12,12 @@ get_dag(name, base_url = NULL)
 \item{base_url}{Base URL of the daggle API. See Details.}
 }
 \value{
-A list with elements: \code{name}, \code{steps}, \code{step_ids}, \code{schedule},
-\code{workdir}, \code{r_version}, \code{last_status}, \code{last_run_id}, \code{last_run}.
+A list with the DAG definition and latest run status. Always
+includes \code{name}, \code{steps}, \code{step_ids}, \code{schedule}, \code{workdir}, \code{r_version},
+\code{last_status}, \code{last_run_id}, \code{last_run}. May also include optional
+fields \code{owner}, \code{team}, \code{description}, \code{tags}, and \code{exposures}
+(a data.frame with \code{name}, \code{type}, \code{url}, \code{description}) when declared
+on the DAG.
 }
 \description{
 Get details for a single DAG
