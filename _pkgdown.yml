@@ -66,6 +66,7 @@ reference:
       - list_dags
       - get_dag
       - plan
+      - get_impact
 
   - title: Run management
     desc: Trigger, inspect, and cancel DAG runs.
@@ -81,6 +82,8 @@ reference:
       - get_summaries
       - get_metadata
       - get_validations
+      - list_annotations
+      - add_annotation
 
   - title: Approval gates
     desc: Approve or reject waiting steps.
