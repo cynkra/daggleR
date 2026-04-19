@@ -13,6 +13,55 @@ resolve_base_url <- function(base_url = NULL) {
   sub("/+$", "", url)
 }
 
+#' Send a request to the daggle API
+#'
+#' Internal helper used by the API wrappers. Builds an `httr2` request
+#' against the resolved base URL, performs it, and parses the JSON body.
+#' Centralises the boilerplate so each wrapper only declares the path,
+#' method, and optional query/body.
+#'
+#' @param path Character vector of URL path segments appended after the
+#'   base URL via [httr2::req_url_path_append()]. Example:
+#'   `c("api", "v1", "dags", name, "runs", run_id)`.
+#' @param method HTTP method. One of `"GET"`, `"POST"`, `"DELETE"`.
+#' @param query Named list of query parameters, or `NULL`. Elements whose
+#'   value is `NULL` are dropped (so callers can pass optional filters
+#'   without conditional wiring).
+#' @param body Named list serialised as a JSON request body, or `NULL`.
+#' @param simplify Passed to [httr2::resp_body_json()] as `simplifyVector`.
+#'   Set `TRUE` for collection endpoints that should return a data.frame;
+#'   leave `FALSE` for single-object endpoints that should return a list.
+#' @param base_url Character string or `NULL`. Passed to [resolve_base_url()].
+#'
+#' @return Parsed JSON response — a list, or a data.frame when
+#'   `simplify = TRUE`.
+#' @keywords internal
+daggle_request <- function(path,
+                           method = c("GET", "POST", "DELETE"),
+                           query = NULL,
+                           body = NULL,
+                           simplify = FALSE,
+                           base_url = NULL) {
+  method <- match.arg(method)
+  url <- resolve_base_url(base_url)
+  req <- Reduce(httr2::req_url_path_append, path, httr2::request(url))
+  if (!is.null(query)) {
+    query <- query[!vapply(query, is.null, logical(1))]
+    if (length(query) > 0) {
+      req <- do.call(httr2::req_url_query, c(list(req), query))
+    }
+  }
+  if (!is.null(body)) {
+    req <- httr2::req_body_json(req, body)
+  }
+  if (method != "GET") {
+    req <- httr2::req_method(req, method)
+  }
+  req |>
+    httr2::req_perform() |>
+    httr2::resp_body_json(simplifyVector = simplify)
+}
+
 #' Get the daggle CLI version
 #'
 #' Shells out to `daggle version` and returns the version string.

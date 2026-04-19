@@ -15,15 +15,12 @@
 #'   those fields. The `tags` column is a list-column of character vectors.
 #' @export
 list_dags <- function(tag = NULL, team = NULL, owner = NULL, base_url = NULL) {
-  url <- resolve_base_url(base_url)
-  req <- httr2::request(url) |>
-    httr2::req_url_path_append("api", "v1", "dags")
-  if (!is.null(tag))   req <- req |> httr2::req_url_query(tag = tag)
-  if (!is.null(team))  req <- req |> httr2::req_url_query(team = team)
-  if (!is.null(owner)) req <- req |> httr2::req_url_query(owner = owner)
-  req |>
-    httr2::req_perform() |>
-    httr2::resp_body_json(simplifyVector = TRUE)
+  daggle_request(
+    c("api", "v1", "dags"),
+    query = list(tag = tag, team = team, owner = owner),
+    simplify = TRUE,
+    base_url = base_url
+  )
 }
 
 #' Get details for a single DAG
@@ -39,11 +36,10 @@ list_dags <- function(tag = NULL, team = NULL, owner = NULL, base_url = NULL) {
 #'   on the DAG.
 #' @export
 get_dag <- function(name, base_url = NULL) {
-  url <- resolve_base_url(base_url)
-  httr2::request(url) |>
-    httr2::req_url_path_append("api", "v1", "dags", name) |>
-    httr2::req_perform() |>
-    httr2::resp_body_json()
+  daggle_request(
+    c("api", "v1", "dags", name),
+    base_url = base_url
+  )
 }
 
 #' Trigger a new DAG run
@@ -55,13 +51,12 @@ get_dag <- function(name, base_url = NULL) {
 #' @return A list with elements: `run_id`, `status`.
 #' @export
 trigger <- function(name, params = list(), base_url = NULL) {
-  url <- resolve_base_url(base_url)
-  httr2::request(url) |>
-    httr2::req_url_path_append("api", "v1", "dags", name, "run") |>
-    httr2::req_body_json(list(params = params)) |>
-    httr2::req_method("POST") |>
-    httr2::req_perform() |>
-    httr2::resp_body_json()
+  daggle_request(
+    c("api", "v1", "dags", name, "run"),
+    method = "POST",
+    body = list(params = params),
+    base_url = base_url
+  )
 }
 
 #' List runs for a DAG
@@ -73,11 +68,11 @@ trigger <- function(name, params = list(), base_url = NULL) {
 #'   `duration_seconds`, `dag_hash`.
 #' @export
 list_runs <- function(name, base_url = NULL) {
-  url <- resolve_base_url(base_url)
-  httr2::request(url) |>
-    httr2::req_url_path_append("api", "v1", "dags", name, "runs") |>
-    httr2::req_perform() |>
-    httr2::resp_body_json(simplifyVector = TRUE)
+  daggle_request(
+    c("api", "v1", "dags", name, "runs"),
+    simplify = TRUE,
+    base_url = base_url
+  )
 }
 
 #' Get details for a specific run
@@ -95,11 +90,10 @@ list_runs <- function(name, base_url = NULL) {
 #'   attached.
 #' @export
 get_run <- function(name, run_id = "latest", base_url = NULL) {
-  url <- resolve_base_url(base_url)
-  httr2::request(url) |>
-    httr2::req_url_path_append("api", "v1", "dags", name, "runs", run_id) |>
-    httr2::req_perform() |>
-    httr2::resp_body_json()
+  daggle_request(
+    c("api", "v1", "dags", name, "runs", run_id),
+    base_url = base_url
+  )
 }
 
 #' Get outputs for a run
@@ -111,13 +105,11 @@ get_run <- function(name, run_id = "latest", base_url = NULL) {
 #' @return A data.frame with columns: `step_id`, `key`, `value`.
 #' @export
 get_outputs <- function(name, run_id = "latest", base_url = NULL) {
-  url <- resolve_base_url(base_url)
-  httr2::request(url) |>
-    httr2::req_url_path_append(
-      "api", "v1", "dags", name, "runs", run_id, "outputs"
-    ) |>
-    httr2::req_perform() |>
-    httr2::resp_body_json(simplifyVector = TRUE)
+  daggle_request(
+    c("api", "v1", "dags", name, "runs", run_id, "outputs"),
+    simplify = TRUE,
+    base_url = base_url
+  )
 }
 
 #' Get log output for a step
@@ -130,13 +122,10 @@ get_outputs <- function(name, run_id = "latest", base_url = NULL) {
 #' @return A list with elements: `step_id`, `stdout`, `stderr`.
 #' @export
 get_step_log <- function(name, run_id, step_id, base_url = NULL) {
-  url <- resolve_base_url(base_url)
-  httr2::request(url) |>
-    httr2::req_url_path_append(
-      "api", "v1", "dags", name, "runs", run_id, "steps", step_id, "log"
-    ) |>
-    httr2::req_perform() |>
-    httr2::resp_body_json()
+  daggle_request(
+    c("api", "v1", "dags", name, "runs", run_id, "steps", step_id, "log"),
+    base_url = base_url
+  )
 }
 
 #' Cancel a running DAG run
@@ -148,14 +137,11 @@ get_step_log <- function(name, run_id, step_id, base_url = NULL) {
 #' @return A list with elements: `status`, `run_id`, `message`.
 #' @export
 cancel_run <- function(name, run_id = "latest", base_url = NULL) {
-  url <- resolve_base_url(base_url)
-  httr2::request(url) |>
-    httr2::req_url_path_append(
-      "api", "v1", "dags", name, "runs", run_id, "cancel"
-    ) |>
-    httr2::req_method("POST") |>
-    httr2::req_perform() |>
-    httr2::resp_body_json()
+  daggle_request(
+    c("api", "v1", "dags", name, "runs", run_id, "cancel"),
+    method = "POST",
+    base_url = base_url
+  )
 }
 
 #' Approve a waiting step
@@ -168,14 +154,11 @@ cancel_run <- function(name, run_id = "latest", base_url = NULL) {
 #' @return A list with elements: `step_id`, `status`.
 #' @export
 approve <- function(name, run_id, step_id, base_url = NULL) {
-  url <- resolve_base_url(base_url)
-  httr2::request(url) |>
-    httr2::req_url_path_append(
-      "api", "v1", "dags", name, "runs", run_id, "steps", step_id, "approve"
-    ) |>
-    httr2::req_method("POST") |>
-    httr2::req_perform() |>
-    httr2::resp_body_json()
+  daggle_request(
+    c("api", "v1", "dags", name, "runs", run_id, "steps", step_id, "approve"),
+    method = "POST",
+    base_url = base_url
+  )
 }
 
 #' Reject a waiting step
@@ -188,14 +171,11 @@ approve <- function(name, run_id, step_id, base_url = NULL) {
 #' @return A list with elements: `step_id`, `status`.
 #' @export
 reject <- function(name, run_id, step_id, base_url = NULL) {
-  url <- resolve_base_url(base_url)
-  httr2::request(url) |>
-    httr2::req_url_path_append(
-      "api", "v1", "dags", name, "runs", run_id, "steps", step_id, "reject"
-    ) |>
-    httr2::req_method("POST") |>
-    httr2::req_perform() |>
-    httr2::resp_body_json()
+  daggle_request(
+    c("api", "v1", "dags", name, "runs", run_id, "steps", step_id, "reject"),
+    method = "POST",
+    base_url = base_url
+  )
 }
 
 #' List registered projects
@@ -205,11 +185,11 @@ reject <- function(name, run_id, step_id, base_url = NULL) {
 #' @return A data.frame with columns: `name`, `path`, `status`, `dags`.
 #' @export
 list_projects <- function(base_url = NULL) {
-  url <- resolve_base_url(base_url)
-  httr2::request(url) |>
-    httr2::req_url_path_append("api", "v1", "projects") |>
-    httr2::req_perform() |>
-    httr2::resp_body_json(simplifyVector = TRUE)
+  daggle_request(
+    c("api", "v1", "projects"),
+    simplify = TRUE,
+    base_url = base_url
+  )
 }
 
 #' Register a project
@@ -222,15 +202,14 @@ list_projects <- function(base_url = NULL) {
 #' @return A list with elements: `name`, `path`.
 #' @export
 register_project <- function(path, name = NULL, base_url = NULL) {
-  url <- resolve_base_url(base_url)
   body <- list(path = path)
   if (!is.null(name)) body$name <- name
-  httr2::request(url) |>
-    httr2::req_url_path_append("api", "v1", "projects") |>
-    httr2::req_body_json(body) |>
-    httr2::req_method("POST") |>
-    httr2::req_perform() |>
-    httr2::resp_body_json()
+  daggle_request(
+    c("api", "v1", "projects"),
+    method = "POST",
+    body = body,
+    base_url = base_url
+  )
 }
 
 #' Unregister a project
@@ -241,12 +220,11 @@ register_project <- function(path, name = NULL, base_url = NULL) {
 #' @return A list with element: `name`.
 #' @export
 unregister_project <- function(name, base_url = NULL) {
-  url <- resolve_base_url(base_url)
-  httr2::request(url) |>
-    httr2::req_url_path_append("api", "v1", "projects", name) |>
-    httr2::req_method("DELETE") |>
-    httr2::req_perform() |>
-    httr2::resp_body_json()
+  daggle_request(
+    c("api", "v1", "projects", name),
+    method = "DELETE",
+    base_url = base_url
+  )
 }
 
 #' Check API health
@@ -256,11 +234,10 @@ unregister_project <- function(name, base_url = NULL) {
 #' @return A list with elements: `status`, `version`, `uptime_seconds`.
 #' @export
 health <- function(base_url = NULL) {
-  url <- resolve_base_url(base_url)
-  httr2::request(url) |>
-    httr2::req_url_path_append("api", "v1", "health") |>
-    httr2::req_perform() |>
-    httr2::resp_body_json()
+  daggle_request(
+    c("api", "v1", "health"),
+    base_url = base_url
+  )
 }
 
 #' Clean up old runs
@@ -271,13 +248,12 @@ health <- function(base_url = NULL) {
 #' @return A list with elements: `removed`, `freed_bytes`, `freed`.
 #' @export
 cleanup <- function(older_than = "30d", base_url = NULL) {
-  url <- resolve_base_url(base_url)
-  httr2::request(url) |>
-    httr2::req_url_path_append("api", "v1", "runs", "cleanup") |>
-    httr2::req_body_json(list(older_than = older_than)) |>
-    httr2::req_method("POST") |>
-    httr2::req_perform() |>
-    httr2::resp_body_json()
+  daggle_request(
+    c("api", "v1", "runs", "cleanup"),
+    method = "POST",
+    body = list(older_than = older_than),
+    base_url = base_url
+  )
 }
 
 #' List artifacts for a run
@@ -290,13 +266,11 @@ cleanup <- function(older_than = "30d", base_url = NULL) {
 #'   `hash`, `size`, `format`.
 #' @export
 list_artifacts <- function(name, run_id = "latest", base_url = NULL) {
-  url <- resolve_base_url(base_url)
-  httr2::request(url) |>
-    httr2::req_url_path_append(
-      "api", "v1", "dags", name, "runs", run_id, "artifacts"
-    ) |>
-    httr2::req_perform() |>
-    httr2::resp_body_json(simplifyVector = TRUE)
+  daggle_request(
+    c("api", "v1", "dags", name, "runs", run_id, "artifacts"),
+    simplify = TRUE,
+    base_url = base_url
+  )
 }
 
 #' Show execution plan with cache status
@@ -309,11 +283,11 @@ list_artifacts <- function(name, run_id = "latest", base_url = NULL) {
 #' @return A data.frame with columns: `step_id`, `status`, `reason`.
 #' @export
 plan <- function(name, base_url = NULL) {
-  url <- resolve_base_url(base_url)
-  httr2::request(url) |>
-    httr2::req_url_path_append("api", "v1", "dags", name, "plan") |>
-    httr2::req_perform() |>
-    httr2::resp_body_json(simplifyVector = TRUE)
+  daggle_request(
+    c("api", "v1", "dags", name, "plan"),
+    simplify = TRUE,
+    base_url = base_url
+  )
 }
 
 #' Get step summaries for a run
@@ -325,13 +299,11 @@ plan <- function(name, base_url = NULL) {
 #' @return A data.frame with columns: `step_id`, `format`, `content`.
 #' @export
 get_summaries <- function(name, run_id = "latest", base_url = NULL) {
-  url <- resolve_base_url(base_url)
-  httr2::request(url) |>
-    httr2::req_url_path_append(
-      "api", "v1", "dags", name, "runs", run_id, "summaries"
-    ) |>
-    httr2::req_perform() |>
-    httr2::resp_body_json(simplifyVector = TRUE)
+  daggle_request(
+    c("api", "v1", "dags", name, "runs", run_id, "summaries"),
+    simplify = TRUE,
+    base_url = base_url
+  )
 }
 
 #' Get step metadata for a run
@@ -343,13 +315,11 @@ get_summaries <- function(name, run_id = "latest", base_url = NULL) {
 #' @return A data.frame with columns: `step_id`, `name`, `type`, `value`.
 #' @export
 get_metadata <- function(name, run_id = "latest", base_url = NULL) {
-  url <- resolve_base_url(base_url)
-  httr2::request(url) |>
-    httr2::req_url_path_append(
-      "api", "v1", "dags", name, "runs", run_id, "metadata"
-    ) |>
-    httr2::req_perform() |>
-    httr2::resp_body_json(simplifyVector = TRUE)
+  daggle_request(
+    c("api", "v1", "dags", name, "runs", run_id, "metadata"),
+    simplify = TRUE,
+    base_url = base_url
+  )
 }
 
 #' Get validation results for a run
@@ -361,13 +331,11 @@ get_metadata <- function(name, run_id = "latest", base_url = NULL) {
 #' @return A data.frame with columns: `step_id`, `name`, `status`, `message`.
 #' @export
 get_validations <- function(name, run_id = "latest", base_url = NULL) {
-  url <- resolve_base_url(base_url)
-  httr2::request(url) |>
-    httr2::req_url_path_append(
-      "api", "v1", "dags", name, "runs", run_id, "validations"
-    ) |>
-    httr2::req_perform() |>
-    httr2::resp_body_json(simplifyVector = TRUE)
+  daggle_request(
+    c("api", "v1", "dags", name, "runs", run_id, "validations"),
+    simplify = TRUE,
+    base_url = base_url
+  )
 }
 
 #' Compare two runs
@@ -383,14 +351,11 @@ get_validations <- function(name, run_id = "latest", base_url = NULL) {
 #'   `dag_hash1`, `dag_hash2`, `changed`).
 #' @export
 compare_runs <- function(name, run1, run2, base_url = NULL) {
-  url <- resolve_base_url(base_url)
-  httr2::request(url) |>
-    httr2::req_url_path_append(
-      "api", "v1", "dags", name, "runs", "compare"
-    ) |>
-    httr2::req_url_query(run1 = run1, run2 = run2) |>
-    httr2::req_perform() |>
-    httr2::resp_body_json()
+  daggle_request(
+    c("api", "v1", "dags", name, "runs", "compare"),
+    query = list(run1 = run1, run2 = run2),
+    base_url = base_url
+  )
 }
 
 #' List annotations for a run
@@ -406,13 +371,11 @@ compare_runs <- function(name, run1, run2, base_url = NULL) {
 #' @return A data.frame with columns: `timestamp`, `author`, `note`.
 #' @export
 list_annotations <- function(name, run_id = "latest", base_url = NULL) {
-  url <- resolve_base_url(base_url)
-  httr2::request(url) |>
-    httr2::req_url_path_append(
-      "api", "v1", "dags", name, "runs", run_id, "annotations"
-    ) |>
-    httr2::req_perform() |>
-    httr2::resp_body_json(simplifyVector = TRUE)
+  daggle_request(
+    c("api", "v1", "dags", name, "runs", run_id, "annotations"),
+    simplify = TRUE,
+    base_url = base_url
+  )
 }
 
 #' Add an annotation to a run
@@ -434,15 +397,12 @@ add_annotation <- function(name, run_id, note, author = NULL, base_url = NULL) {
   if (is.null(author) || !nzchar(author)) {
     author <- Sys.getenv("USER")
   }
-  url <- resolve_base_url(base_url)
-  body <- list(note = note, author = author)
-  resp <- httr2::request(url) |>
-    httr2::req_url_path_append(
-      "api", "v1", "dags", name, "runs", run_id, "annotations"
-    ) |>
-    httr2::req_body_json(body) |>
-    httr2::req_perform() |>
-    httr2::resp_body_json()
+  resp <- daggle_request(
+    c("api", "v1", "dags", name, "runs", run_id, "annotations"),
+    method = "POST",
+    body = list(note = note, author = author),
+    base_url = base_url
+  )
   invisible(resp)
 }
 
@@ -459,9 +419,9 @@ add_annotation <- function(name, run_id, note, author = NULL, base_url = NULL) {
 #'   (data.frame with `name`, `type`, `url`, `description`).
 #' @export
 get_impact <- function(name, base_url = NULL) {
-  url <- resolve_base_url(base_url)
-  httr2::request(url) |>
-    httr2::req_url_path_append("api", "v1", "dags", name, "impact") |>
-    httr2::req_perform() |>
-    httr2::resp_body_json(simplifyVector = TRUE)
+  daggle_request(
+    c("api", "v1", "dags", name, "impact"),
+    simplify = TRUE,
+    base_url = base_url
+  )
 }
