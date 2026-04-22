@@ -14,7 +14,7 @@
 #'   `owner`, `team`, `description`, and `tags` columns when any DAG declares
 #'   those fields. The `tags` column is a list-column of character vectors.
 #' @export
-list_dags <- function(tag = NULL, team = NULL, owner = NULL, base_url = NULL) {
+daggle_list_dags <- function(tag = NULL, team = NULL, owner = NULL, base_url = NULL) {
   daggle_request(
     c("api", "v1", "dags"),
     query = list(tag = tag, team = team, owner = owner),
@@ -26,7 +26,7 @@ list_dags <- function(tag = NULL, team = NULL, owner = NULL, base_url = NULL) {
 #' Get details for a single DAG
 #'
 #' @param name Character string. Name of the DAG.
-#' @inheritParams list_dags
+#' @inheritParams daggle_list_dags
 #'
 #' @return A list with the DAG definition and latest run status. Always
 #'   includes `name`, `steps`, `step_ids`, `schedule`, `workdir`, `r_version`,
@@ -35,7 +35,7 @@ list_dags <- function(tag = NULL, team = NULL, owner = NULL, base_url = NULL) {
 #'   (a data.frame with `name`, `type`, `url`, `description`) when declared
 #'   on the DAG.
 #' @export
-get_dag <- function(name, base_url = NULL) {
+daggle_get_dag <- function(name, base_url = NULL) {
   daggle_request(
     c("api", "v1", "dags", name),
     base_url = base_url
@@ -46,11 +46,11 @@ get_dag <- function(name, base_url = NULL) {
 #'
 #' @param name Character string. Name of the DAG to trigger.
 #' @param params Named list of parameters to pass to the run.
-#' @inheritParams list_dags
+#' @inheritParams daggle_list_dags
 #'
 #' @return A list with elements: `run_id`, `status`.
 #' @export
-trigger <- function(name, params = list(), base_url = NULL) {
+daggle_trigger <- function(name, params = list(), base_url = NULL) {
   daggle_request(
     c("api", "v1", "dags", name, "run"),
     method = "POST",
@@ -62,12 +62,12 @@ trigger <- function(name, params = list(), base_url = NULL) {
 #' List runs for a DAG
 #'
 #' @param name Character string. Name of the DAG.
-#' @inheritParams list_dags
+#' @inheritParams daggle_list_dags
 #'
 #' @return A data.frame with columns: `run_id`, `started`, `status`,
 #'   `duration_seconds`, `dag_hash`.
 #' @export
-list_runs <- function(name, base_url = NULL) {
+daggle_list_runs <- function(name, base_url = NULL) {
   daggle_request(
     c("api", "v1", "dags", name, "runs"),
     simplify = TRUE,
@@ -79,7 +79,7 @@ list_runs <- function(name, base_url = NULL) {
 #'
 #' @param name Character string. Name of the DAG.
 #' @param run_id Character string. Run ID, or `"latest"` for the most recent.
-#' @inheritParams list_dags
+#' @inheritParams daggle_list_dags
 #'
 #' @return A list describing the run. Includes `run_id`, `dag_name`, `status`,
 #'   `started`, `ended`, `duration_seconds`, `dag_hash`, `r_version`,
@@ -89,7 +89,7 @@ list_runs <- function(name, base_url = NULL) {
 #'   (data.frame of `timestamp`, `author`, `note`) when notes have been
 #'   attached.
 #' @export
-get_run <- function(name, run_id = "latest", base_url = NULL) {
+daggle_get_run <- function(name, run_id = "latest", base_url = NULL) {
   daggle_request(
     c("api", "v1", "dags", name, "runs", run_id),
     base_url = base_url
@@ -100,11 +100,11 @@ get_run <- function(name, run_id = "latest", base_url = NULL) {
 #'
 #' @param name Character string. Name of the DAG.
 #' @param run_id Character string. Run ID, or `"latest"` for the most recent.
-#' @inheritParams list_dags
+#' @inheritParams daggle_list_dags
 #'
 #' @return A data.frame with columns: `step_id`, `key`, `value`.
 #' @export
-get_outputs <- function(name, run_id = "latest", base_url = NULL) {
+daggle_get_outputs <- function(name, run_id = "latest", base_url = NULL) {
   daggle_request(
     c("api", "v1", "dags", name, "runs", run_id, "outputs"),
     simplify = TRUE,
@@ -117,11 +117,11 @@ get_outputs <- function(name, run_id = "latest", base_url = NULL) {
 #' @param name Character string. Name of the DAG.
 #' @param run_id Character string. Run ID.
 #' @param step_id Character string. Step ID.
-#' @inheritParams list_dags
+#' @inheritParams daggle_list_dags
 #'
 #' @return A list with elements: `step_id`, `stdout`, `stderr`.
 #' @export
-get_step_log <- function(name, run_id, step_id, base_url = NULL) {
+daggle_get_step_log <- function(name, run_id, step_id, base_url = NULL) {
   daggle_request(
     c("api", "v1", "dags", name, "runs", run_id, "steps", step_id, "log"),
     base_url = base_url
@@ -132,11 +132,11 @@ get_step_log <- function(name, run_id, step_id, base_url = NULL) {
 #'
 #' @param name Character string. Name of the DAG.
 #' @param run_id Character string. Run ID, or `"latest"` for the most recent.
-#' @inheritParams list_dags
+#' @inheritParams daggle_list_dags
 #'
 #' @return A list with elements: `status`, `run_id`, `message`.
 #' @export
-cancel_run <- function(name, run_id = "latest", base_url = NULL) {
+daggle_cancel_run <- function(name, run_id = "latest", base_url = NULL) {
   daggle_request(
     c("api", "v1", "dags", name, "runs", run_id, "cancel"),
     method = "POST",
@@ -149,11 +149,11 @@ cancel_run <- function(name, run_id = "latest", base_url = NULL) {
 #' @param name Character string. Name of the DAG.
 #' @param run_id Character string. Run ID.
 #' @param step_id Character string. Step ID to approve.
-#' @inheritParams list_dags
+#' @inheritParams daggle_list_dags
 #'
 #' @return A list with elements: `step_id`, `status`.
 #' @export
-approve <- function(name, run_id, step_id, base_url = NULL) {
+daggle_approve <- function(name, run_id, step_id, base_url = NULL) {
   daggle_request(
     c("api", "v1", "dags", name, "runs", run_id, "steps", step_id, "approve"),
     method = "POST",
@@ -166,11 +166,11 @@ approve <- function(name, run_id, step_id, base_url = NULL) {
 #' @param name Character string. Name of the DAG.
 #' @param run_id Character string. Run ID.
 #' @param step_id Character string. Step ID to reject.
-#' @inheritParams list_dags
+#' @inheritParams daggle_list_dags
 #'
 #' @return A list with elements: `step_id`, `status`.
 #' @export
-reject <- function(name, run_id, step_id, base_url = NULL) {
+daggle_reject <- function(name, run_id, step_id, base_url = NULL) {
   daggle_request(
     c("api", "v1", "dags", name, "runs", run_id, "steps", step_id, "reject"),
     method = "POST",
@@ -180,11 +180,11 @@ reject <- function(name, run_id, step_id, base_url = NULL) {
 
 #' List registered projects
 #'
-#' @inheritParams list_dags
+#' @inheritParams daggle_list_dags
 #'
 #' @return A data.frame with columns: `name`, `path`, `status`, `dags`.
 #' @export
-list_projects <- function(base_url = NULL) {
+daggle_list_projects <- function(base_url = NULL) {
   daggle_request(
     c("api", "v1", "projects"),
     simplify = TRUE,
@@ -197,11 +197,11 @@ list_projects <- function(base_url = NULL) {
 #' @param path Character string. Absolute path to the project directory.
 #' @param name Character string or `NULL`. Optional project name; defaults to
 #'   the directory basename on the server side.
-#' @inheritParams list_dags
+#' @inheritParams daggle_list_dags
 #'
 #' @return A list with elements: `name`, `path`.
 #' @export
-register_project <- function(path, name = NULL, base_url = NULL) {
+daggle_register_project <- function(path, name = NULL, base_url = NULL) {
   body <- list(path = path)
   if (!is.null(name)) body$name <- name
   daggle_request(
@@ -215,11 +215,11 @@ register_project <- function(path, name = NULL, base_url = NULL) {
 #' Unregister a project
 #'
 #' @param name Character string. Name of the project to unregister.
-#' @inheritParams list_dags
+#' @inheritParams daggle_list_dags
 #'
 #' @return A list with element: `name`.
 #' @export
-unregister_project <- function(name, base_url = NULL) {
+daggle_unregister_project <- function(name, base_url = NULL) {
   daggle_request(
     c("api", "v1", "projects", name),
     method = "DELETE",
@@ -229,11 +229,11 @@ unregister_project <- function(name, base_url = NULL) {
 
 #' Check API health
 #'
-#' @inheritParams list_dags
+#' @inheritParams daggle_list_dags
 #'
 #' @return A list with elements: `status`, `version`, `uptime_seconds`.
 #' @export
-health <- function(base_url = NULL) {
+daggle_health <- function(base_url = NULL) {
   daggle_request(
     c("api", "v1", "health"),
     base_url = base_url
@@ -243,11 +243,11 @@ health <- function(base_url = NULL) {
 #' Clean up old runs
 #'
 #' @param older_than Character string. Age threshold (e.g., `"30d"`).
-#' @inheritParams list_dags
+#' @inheritParams daggle_list_dags
 #'
 #' @return A list with elements: `removed`, `freed_bytes`, `freed`.
 #' @export
-cleanup <- function(older_than = "30d", base_url = NULL) {
+daggle_cleanup <- function(older_than = "30d", base_url = NULL) {
   daggle_request(
     c("api", "v1", "runs", "cleanup"),
     method = "POST",
@@ -260,12 +260,12 @@ cleanup <- function(older_than = "30d", base_url = NULL) {
 #'
 #' @param name Character string. Name of the DAG.
 #' @param run_id Character string. Run ID, or `"latest"` for the most recent.
-#' @inheritParams list_dags
+#' @inheritParams daggle_list_dags
 #'
 #' @return A data.frame with columns: `step_id`, `name`, `path`, `abs_path`,
 #'   `hash`, `size`, `format`.
 #' @export
-list_artifacts <- function(name, run_id = "latest", base_url = NULL) {
+daggle_list_artifacts <- function(name, run_id = "latest", base_url = NULL) {
   daggle_request(
     c("api", "v1", "dags", name, "runs", run_id, "artifacts"),
     simplify = TRUE,
@@ -278,11 +278,11 @@ list_artifacts <- function(name, run_id = "latest", base_url = NULL) {
 #' Returns which steps would run vs skip based on the current cache state.
 #'
 #' @param name Character string. Name of the DAG.
-#' @inheritParams list_dags
+#' @inheritParams daggle_list_dags
 #'
 #' @return A data.frame with columns: `step_id`, `status`, `reason`.
 #' @export
-plan <- function(name, base_url = NULL) {
+daggle_plan <- function(name, base_url = NULL) {
   daggle_request(
     c("api", "v1", "dags", name, "plan"),
     simplify = TRUE,
@@ -294,11 +294,11 @@ plan <- function(name, base_url = NULL) {
 #'
 #' @param name Character string. Name of the DAG.
 #' @param run_id Character string. Run ID, or `"latest"` for the most recent.
-#' @inheritParams list_dags
+#' @inheritParams daggle_list_dags
 #'
 #' @return A data.frame with columns: `step_id`, `format`, `content`.
 #' @export
-get_summaries <- function(name, run_id = "latest", base_url = NULL) {
+daggle_get_summaries <- function(name, run_id = "latest", base_url = NULL) {
   daggle_request(
     c("api", "v1", "dags", name, "runs", run_id, "summaries"),
     simplify = TRUE,
@@ -310,11 +310,11 @@ get_summaries <- function(name, run_id = "latest", base_url = NULL) {
 #'
 #' @param name Character string. Name of the DAG.
 #' @param run_id Character string. Run ID, or `"latest"` for the most recent.
-#' @inheritParams list_dags
+#' @inheritParams daggle_list_dags
 #'
 #' @return A data.frame with columns: `step_id`, `name`, `type`, `value`.
 #' @export
-get_metadata <- function(name, run_id = "latest", base_url = NULL) {
+daggle_get_metadata <- function(name, run_id = "latest", base_url = NULL) {
   daggle_request(
     c("api", "v1", "dags", name, "runs", run_id, "metadata"),
     simplify = TRUE,
@@ -326,11 +326,11 @@ get_metadata <- function(name, run_id = "latest", base_url = NULL) {
 #'
 #' @param name Character string. Name of the DAG.
 #' @param run_id Character string. Run ID, or `"latest"` for the most recent.
-#' @inheritParams list_dags
+#' @inheritParams daggle_list_dags
 #'
 #' @return A data.frame with columns: `step_id`, `name`, `status`, `message`.
 #' @export
-get_validations <- function(name, run_id = "latest", base_url = NULL) {
+daggle_get_validations <- function(name, run_id = "latest", base_url = NULL) {
   daggle_request(
     c("api", "v1", "dags", name, "runs", run_id, "validations"),
     simplify = TRUE,
@@ -343,14 +343,14 @@ get_validations <- function(name, run_id = "latest", base_url = NULL) {
 #' @param name Character string. Name of the DAG.
 #' @param run1 Character string. First run ID.
 #' @param run2 Character string. Second run ID.
-#' @inheritParams list_dags
+#' @inheritParams daggle_list_dags
 #'
 #' @return A list with elements: `outputs_diff` (data.frame with columns
 #'   `step_id`, `key`, `value1`, `value2`), `duration_diff` (list with
 #'   `run1_seconds`, `run2_seconds`, `diff_seconds`), `meta_diff` (list with
 #'   `dag_hash1`, `dag_hash2`, `changed`).
 #' @export
-compare_runs <- function(name, run1, run2, base_url = NULL) {
+daggle_compare_runs <- function(name, run1, run2, base_url = NULL) {
   daggle_request(
     c("api", "v1", "dags", name, "runs", "compare"),
     query = list(run1 = run1, run2 = run2),
@@ -366,11 +366,11 @@ compare_runs <- function(name, run1, run2, base_url = NULL) {
 #'
 #' @param name Character string. Name of the DAG.
 #' @param run_id Character string. Run ID, or `"latest"` for the most recent.
-#' @inheritParams list_dags
+#' @inheritParams daggle_list_dags
 #'
 #' @return A data.frame with columns: `timestamp`, `author`, `note`.
 #' @export
-list_annotations <- function(name, run_id = "latest", base_url = NULL) {
+daggle_list_annotations <- function(name, run_id = "latest", base_url = NULL) {
   daggle_request(
     c("api", "v1", "dags", name, "runs", run_id, "annotations"),
     simplify = TRUE,
@@ -389,11 +389,11 @@ list_annotations <- function(name, run_id = "latest", base_url = NULL) {
 #' @param note Character string. The annotation text.
 #' @param author Character string. Who wrote the annotation. Defaults to the
 #'   value of `Sys.getenv("USER")`.
-#' @inheritParams list_dags
+#' @inheritParams daggle_list_dags
 #'
 #' @return Invisibly, the HTTP response status list returned by the server.
 #' @export
-add_annotation <- function(name, run_id, note, author = NULL, base_url = NULL) {
+daggle_add_annotation <- function(name, run_id, note, author = NULL, base_url = NULL) {
   if (is.null(author) || !nzchar(author)) {
     author <- Sys.getenv("USER")
   }
@@ -412,13 +412,13 @@ add_annotation <- function(name, run_id, note, author = NULL, base_url = NULL) {
 #' any `exposures:` (dashboards, reports, Shiny apps) declared on the DAG.
 #'
 #' @param name Character string. Name of the DAG.
-#' @inheritParams list_dags
+#' @inheritParams daggle_list_dags
 #'
 #' @return A list with elements `dag` (character), `downstream_dags`
 #'   (data.frame with `name`, `project`, `trigger_on_status`), and `exposures`
 #'   (data.frame with `name`, `type`, `url`, `description`).
 #' @export
-get_impact <- function(name, base_url = NULL) {
+daggle_get_impact <- function(name, base_url = NULL) {
   daggle_request(
     c("api", "v1", "dags", name, "impact"),
     simplify = TRUE,
@@ -429,10 +429,10 @@ get_impact <- function(name, base_url = NULL) {
 #' List schedules for a DAG
 #'
 #' Returns every schedule registered for the DAG — both YAML-defined schedules
-#' and ones added at runtime via [add_schedule()].
+#' and ones added at runtime via [daggle_add_schedule()].
 #'
 #' @param name Character string. Name of the DAG.
-#' @inheritParams list_dags
+#' @inheritParams daggle_list_dags
 #'
 #' @return A data.frame with columns `id`, `cron`, `source`, `enabled`,
 #'   `next_run`. The `source` column is `"yaml"` for schedules declared in
@@ -441,7 +441,7 @@ get_impact <- function(name, base_url = NULL) {
 #'   disabled. A `params` list-column is present when any schedule carries
 #'   parameter overrides.
 #' @export
-list_schedules <- function(name, base_url = NULL) {
+daggle_list_schedules <- function(name, base_url = NULL) {
   daggle_request(
     c("api", "v1", "dags", name, "schedules"),
     simplify = TRUE,
@@ -453,7 +453,7 @@ list_schedules <- function(name, base_url = NULL) {
 #'
 #' Registers a new cron schedule without editing the DAG's YAML. The schedule
 #' is stored server-side with `source = "runtime"` and can be removed with
-#' [remove_schedule()].
+#' [daggle_remove_schedule()].
 #'
 #' @param name Character string. Name of the DAG.
 #' @param cron Character string. Cron expression (e.g. `"0 7 * * *"`).
@@ -461,12 +461,12 @@ list_schedules <- function(name, base_url = NULL) {
 #'   run, or `NULL`.
 #' @param enabled Logical. Whether the schedule fires immediately. Defaults
 #'   to `TRUE`.
-#' @inheritParams list_dags
+#' @inheritParams daggle_list_dags
 #'
 #' @return A list describing the created schedule: `id`, `cron`, `source`,
 #'   `enabled`, `next_run`, and (when set) `params`.
 #' @export
-add_schedule <- function(name, cron, params = NULL, enabled = TRUE, base_url = NULL) {
+daggle_add_schedule <- function(name, cron, params = NULL, enabled = TRUE, base_url = NULL) {
   body <- list(cron = cron, enabled = enabled)
   if (!is.null(params)) body$params <- params
   daggle_request(
@@ -479,18 +479,18 @@ add_schedule <- function(name, cron, params = NULL, enabled = TRUE, base_url = N
 
 #' Remove a runtime schedule from a DAG
 #'
-#' Only schedules added via [add_schedule()] (`source = "runtime"`) can be
+#' Only schedules added via [daggle_add_schedule()] (`source = "runtime"`) can be
 #' removed. Attempting to delete a YAML-declared schedule returns a `400
 #' Bad Request` from the server.
 #'
 #' @param name Character string. Name of the DAG.
 #' @param schedule_id Character string. ID of the schedule to remove, as
-#'   returned by [list_schedules()] or [add_schedule()].
-#' @inheritParams list_dags
+#'   returned by [daggle_list_schedules()] or [daggle_add_schedule()].
+#' @inheritParams daggle_list_dags
 #'
 #' @return `TRUE`, invisibly.
 #' @export
-remove_schedule <- function(name, schedule_id, base_url = NULL) {
+daggle_remove_schedule <- function(name, schedule_id, base_url = NULL) {
   daggle_request(
     c("api", "v1", "dags", name, "schedules", schedule_id),
     method = "DELETE",
@@ -507,11 +507,11 @@ remove_schedule <- function(name, schedule_id, base_url = NULL) {
 #' @param name Character string. Name of the DAG.
 #' @param schedule_id Character string. ID of the schedule to update.
 #' @param enabled Logical. `TRUE` to enable, `FALSE` to disable.
-#' @inheritParams list_dags
+#' @inheritParams daggle_list_dags
 #'
 #' @return A list with the updated schedule object.
 #' @export
-set_schedule_enabled <- function(name, schedule_id, enabled, base_url = NULL) {
+daggle_set_schedule_enabled <- function(name, schedule_id, enabled, base_url = NULL) {
   daggle_request(
     c("api", "v1", "dags", name, "schedules", schedule_id),
     method = "PATCH",
@@ -525,17 +525,17 @@ set_schedule_enabled <- function(name, schedule_id, enabled, base_url = NULL) {
 #' Triggers creation (or refresh) of the tamper-evident `.tar.gz` archive
 #' for a run on the server and returns the archive metadata without
 #' downloading the bytes. The archive is stored server-side at
-#' `DAGGLE_DATA_DIR/archives/{name}_{run_id}.tar.gz`; use [archive_run()]
+#' `DAGGLE_DATA_DIR/archives/{name}_{run_id}.tar.gz`; use [daggle_archive_run()]
 #' to stream it locally.
 #'
 #' @param name Character string. Name of the DAG.
 #' @param run_id Character string. Run ID, or `"latest"` for the most recent.
-#' @inheritParams list_dags
+#' @inheritParams daggle_list_dags
 #'
 #' @return A list with elements `path` (absolute path on the server),
 #'   `files` (count), `bytes` (total size), `created_at` (RFC3339 UTC).
 #' @export
-archive_info <- function(name, run_id, base_url = NULL) {
+daggle_archive_info <- function(name, run_id, base_url = NULL) {
   daggle_request(
     c("api", "v1", "dags", name, "runs", run_id, "archive"),
     method = "POST",
@@ -550,14 +550,14 @@ archive_info <- function(name, run_id, base_url = NULL) {
 #'
 #' @param name Character string. Name of the DAG.
 #' @param run_id Character string. Run ID, or `"latest"` for the most recent.
-#' @inheritParams list_dags
+#' @inheritParams daggle_list_dags
 #'
 #' @return A list with elements `ok` (logical, overall integrity),
 #'   `files` (count), `mismatched` (character vector of file paths whose
 #'   contents changed), `missing` (expected but not found), `extra`
 #'   (found but not expected).
 #' @export
-verify_archive <- function(name, run_id, base_url = NULL) {
+daggle_verify_archive <- function(name, run_id, base_url = NULL) {
   daggle_request(
     c("api", "v1", "dags", name, "runs", run_id, "verify"),
     method = "POST",
@@ -568,7 +568,7 @@ verify_archive <- function(name, run_id, base_url = NULL) {
 #' Download a tamper-evident run archive
 #'
 #' Creates (or refreshes) the server-side archive and writes the `.tar.gz`
-#' bytes to `dest`. Use [verify_archive()] afterwards to confirm integrity.
+#' bytes to `dest`. Use [daggle_verify_archive()] afterwards to confirm integrity.
 #'
 #' This is the first wrapper in daggleR that returns a binary response.
 #' Future binary downloads should mirror this shape: resolve the base URL
@@ -581,12 +581,12 @@ verify_archive <- function(name, run_id, base_url = NULL) {
 #' @param run_id Character string. Run ID, or `"latest"` for the most recent.
 #' @param dest Character string. Local file path to write the archive to.
 #'   Defaults to a temporary file with extension `.tar.gz`.
-#' @inheritParams list_dags
+#' @inheritParams daggle_list_dags
 #'
 #' @return The absolute path to `dest`, returned invisibly.
 #' @export
-archive_run <- function(name, run_id, dest = tempfile(fileext = ".tar.gz"), base_url = NULL) {
-  archive_info(name, run_id, base_url = base_url)
+daggle_archive_run <- function(name, run_id, dest = tempfile(fileext = ".tar.gz"), base_url = NULL) {
+  daggle_archive_info(name, run_id, base_url = base_url)
 
   url <- resolve_base_url(base_url)
   req <- Reduce(

@@ -17,11 +17,11 @@
 #'
 #' @return The absolute path to the written YAML file, returned invisibly.
 #'
-#' @seealso [register_project()] to register the project with the daggle
+#' @seealso [daggle_register_project()] to register the project with the daggle
 #'   daemon so newly scaffolded DAGs become visible over the HTTP API.
 #'
 #' @export
-init_dag <- function(name,
+daggle_init_dag <- function(name,
                      template = c("minimal", "data-pipeline", "pkg-check", "pkg-release"),
                      dir = getwd(),
                      overwrite = FALSE) {

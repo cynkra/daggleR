@@ -11,10 +11,10 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' output("row_count", nrow(df))
-#' output("model_path", "/tmp/model.rds")
+#' daggle_output("row_count", nrow(df))
+#' daggle_output("model_path", "/tmp/model.rds")
 #' }
-output <- function(name, value) {
+daggle_output <- function(name, value) {
   if (!grepl("^[a-zA-Z_][a-zA-Z0-9_]*$", name)) {
     stop(
       "Invalid output name '", name, "'. ",
@@ -32,9 +32,9 @@ output <- function(name, value) {
 #' @export
 #' @examples
 #' \dontrun{
-#' run_id()
+#' daggle_run_id()
 #' }
-run_id <- function() {
+daggle_run_id <- function() {
   Sys.getenv("DAGGLE_RUN_ID")
 }
 
@@ -44,9 +44,9 @@ run_id <- function() {
 #' @export
 #' @examples
 #' \dontrun{
-#' dag_name()
+#' daggle_dag_name()
 #' }
-dag_name <- function() {
+daggle_dag_name <- function() {
   Sys.getenv("DAGGLE_DAG_NAME")
 }
 
@@ -56,9 +56,9 @@ dag_name <- function() {
 #' @export
 #' @examples
 #' \dontrun{
-#' run_dir()
+#' daggle_run_dir()
 #' }
-run_dir <- function() {
+daggle_run_dir <- function() {
   Sys.getenv("DAGGLE_RUN_DIR")
 }
 
@@ -73,9 +73,9 @@ run_dir <- function() {
 #' @export
 #' @examples
 #' \dontrun{
-#' region <- get_matrix("region")
+#' region <- daggle_get_matrix("region")
 #' }
-get_matrix <- function(key) {
+daggle_get_matrix <- function(key) {
   Sys.getenv(paste0("DAGGLE_MATRIX_", toupper(key)))
 }
 
@@ -91,9 +91,9 @@ get_matrix <- function(key) {
 #' @export
 #' @examples
 #' \dontrun{
-#' accuracy <- get_output("fit-lda", "accuracy")
+#' accuracy <- daggle_get_output("fit-lda", "accuracy")
 #' }
-get_output <- function(step, key) {
+daggle_get_output <- function(step, key) {
   var_name <- paste0(
     "DAGGLE_OUTPUT_",
     toupper(gsub("-", "_", step)), "_",
@@ -113,9 +113,9 @@ get_output <- function(step, key) {
 #' @export
 #' @examples
 #' \dontrun{
-#' summary_md("## Results\n- 1542 rows processed\n- 3 outliers found")
+#' daggle_summary_md("## Results\n- 1542 rows processed\n- 3 outliers found")
 #' }
-summary_md <- function(text) {
+daggle_summary_md <- function(text) {
   cat(sprintf("::daggle-summary format=markdown::%s\n", as.character(text)))
   invisible(text)
 }
@@ -132,10 +132,10 @@ summary_md <- function(text) {
 #' @export
 #' @examples
 #' \dontrun{
-#' meta_numeric("row_count", nrow(df))
-#' meta_numeric("accuracy", 0.95)
+#' daggle_meta_numeric("row_count", nrow(df))
+#' daggle_meta_numeric("accuracy", 0.95)
 #' }
-meta_numeric <- function(name, value) {
+daggle_meta_numeric <- function(name, value) {
   if (!grepl("^[a-zA-Z_][a-zA-Z0-9_]*$", name)) {
     stop("Invalid metadata name '", name, "'. Must match [a-zA-Z_][a-zA-Z0-9_]*.", call. = FALSE)
   }
@@ -152,9 +152,9 @@ meta_numeric <- function(name, value) {
 #' @export
 #' @examples
 #' \dontrun{
-#' meta_text("model_type", "linear regression")
+#' daggle_meta_text("model_type", "linear regression")
 #' }
-meta_text <- function(name, value) {
+daggle_meta_text <- function(name, value) {
   if (!grepl("^[a-zA-Z_][a-zA-Z0-9_]*$", name)) {
     stop("Invalid metadata name '", name, "'. Must match [a-zA-Z_][a-zA-Z0-9_]*.", call. = FALSE)
   }
@@ -174,14 +174,14 @@ meta_text <- function(name, value) {
 #' @export
 #' @examples
 #' \dontrun{
-#' meta_table("top5", head(results, 5))
+#' daggle_meta_table("top5", head(results, 5))
 #' }
-meta_table <- function(name, df) {
+daggle_meta_table <- function(name, df) {
   if (!grepl("^[a-zA-Z_][a-zA-Z0-9_]*$", name)) {
     stop("Invalid metadata name '", name, "'. Must match [a-zA-Z_][a-zA-Z0-9_]*.", call. = FALSE)
   }
   if (!requireNamespace("jsonlite", quietly = TRUE)) {
-    stop("The jsonlite package is required for meta_table(). Install with: install.packages('jsonlite')", call. = FALSE)
+    stop("The jsonlite package is required for daggle_meta_table(). Install with: install.packages('jsonlite')", call. = FALSE)
   }
   json <- jsonlite::toJSON(df, auto_unbox = TRUE)
   cat(sprintf("::daggle-meta type=table name=%s::%s\n", name, json))
@@ -200,9 +200,9 @@ meta_table <- function(name, df) {
 #' @export
 #' @examples
 #' \dontrun{
-#' meta_image("residuals_plot", "output/residuals.png")
+#' daggle_meta_image("residuals_plot", "output/residuals.png")
 #' }
-meta_image <- function(name, path) {
+daggle_meta_image <- function(name, path) {
   if (!grepl("^[a-zA-Z_][a-zA-Z0-9_]*$", name)) {
     stop("Invalid metadata name '", name, "'. Must match [a-zA-Z_][a-zA-Z0-9_]*.", call. = FALSE)
   }
@@ -224,11 +224,11 @@ meta_image <- function(name, path) {
 #' @export
 #' @examples
 #' \dontrun{
-#' validation("row_count", "pass", "Expected > 0, got 1542")
-#' validation("missing_pct", "warn", "12% missing (threshold: 20%)")
-#' validation("schema", "fail", "Column 'date' expected date, got character")
+#' daggle_validation("row_count", "pass", "Expected > 0, got 1542")
+#' daggle_validation("missing_pct", "warn", "12% missing (threshold: 20%)")
+#' daggle_validation("schema", "fail", "Column 'date' expected date, got character")
 #' }
-validation <- function(name, status = c("pass", "warn", "fail"), message = "") {
+daggle_validation <- function(name, status = c("pass", "warn", "fail"), message = "") {
   status <- match.arg(status)
   if (!grepl("^[a-zA-Z_][a-zA-Z0-9_]*$", name)) {
     stop("Invalid validation name '", name, "'. Must match [a-zA-Z_][a-zA-Z0-9_]*.", call. = FALSE)

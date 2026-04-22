@@ -1,6 +1,6 @@
-test_that("archive_info() returns archive metadata", {
+test_that("daggle_archive_info() returns archive metadata", {
   httptest2::with_mock_dir("archive-info", {
-    result <- archive_info("etl", run_id = "latest",
+    result <- daggle_archive_info("etl", run_id = "latest",
                            base_url = "http://127.0.0.1:8787")
     expect_type(result, "list")
     expect_named(result, c("path", "files", "bytes", "created_at"))
@@ -9,9 +9,9 @@ test_that("archive_info() returns archive metadata", {
   })
 })
 
-test_that("verify_archive() surfaces all Report fields", {
+test_that("daggle_verify_archive() surfaces all Report fields", {
   httptest2::with_mock_dir("archive-verify", {
-    result <- verify_archive("etl", run_id = "latest",
+    result <- daggle_verify_archive("etl", run_id = "latest",
                              base_url = "http://127.0.0.1:8787")
     expect_type(result, "list")
     expect_true(all(c("ok", "files", "mismatched", "missing", "extra") %in% names(result)))
@@ -19,7 +19,7 @@ test_that("verify_archive() surfaces all Report fields", {
   })
 })
 
-test_that("archive_run() streams a gzip file to dest", {
+test_that("daggle_archive_run() streams a gzip file to dest", {
   fixture <- test_path("fixtures", "run.tar.gz")
   gz_bytes <- readBin(fixture, "raw", n = file.info(fixture)$size)
 
@@ -50,7 +50,7 @@ test_that("archive_run() streams a gzip file to dest", {
       responses[[i]]
     },
     {
-      path <- archive_run("etl", run_id = "latest", dest = dest,
+      path <- daggle_archive_run("etl", run_id = "latest", dest = dest,
                           base_url = "http://127.0.0.1:8787")
       expect_true(file.exists(path))
       expect_gt(file.info(path)$size, 0)

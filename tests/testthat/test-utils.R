@@ -21,9 +21,9 @@ test_that("resolve_base_url() strips trailing slashes", {
   expect_equal(resolve_base_url(), "http://from-env:9999")
 })
 
-test_that("cli_version() errors when daggle is not on PATH", {
+test_that("daggle_cli_version() errors when daggle is not on PATH", {
   withr::local_path("/nonexistent", action = "replace")
-  expect_error(cli_version(), "daggle CLI not found")
+  expect_error(daggle_cli_version(), "daggle CLI not found")
 })
 
 test_that("daggle_request() GET with simplify returns data.frame", {

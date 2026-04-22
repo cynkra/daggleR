@@ -71,9 +71,9 @@ daggle_request <- function(path,
 #' @export
 #' @examples
 #' \dontrun{
-#' cli_version()
+#' daggle_cli_version()
 #' }
-cli_version <- function() {
+daggle_cli_version <- function() {
   if (Sys.which("daggle") == "") {
     stop("daggle CLI not found on PATH.", call. = FALSE)
   }
