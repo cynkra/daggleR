@@ -519,3 +519,82 @@ set_schedule_enabled <- function(name, schedule_id, enabled, base_url = NULL) {
     base_url = base_url
   )
 }
+
+#' Create and describe a tamper-evident run archive
+#'
+#' Triggers creation (or refresh) of the tamper-evident `.tar.gz` archive
+#' for a run on the server and returns the archive metadata without
+#' downloading the bytes. The archive is stored server-side at
+#' `DAGGLE_DATA_DIR/archives/{name}_{run_id}.tar.gz`; use [archive_run()]
+#' to stream it locally.
+#'
+#' @param name Character string. Name of the DAG.
+#' @param run_id Character string. Run ID, or `"latest"` for the most recent.
+#' @inheritParams list_dags
+#'
+#' @return A list with elements `path` (absolute path on the server),
+#'   `files` (count), `bytes` (total size), `created_at` (RFC3339 UTC).
+#' @export
+archive_info <- function(name, run_id, base_url = NULL) {
+  daggle_request(
+    c("api", "v1", "dags", name, "runs", run_id, "archive"),
+    method = "POST",
+    base_url = base_url
+  )
+}
+
+#' Verify integrity of a run archive
+#'
+#' Recomputes hashes of every file recorded in the archive's manifest and
+#' reports any files whose contents, presence, or count differs.
+#'
+#' @param name Character string. Name of the DAG.
+#' @param run_id Character string. Run ID, or `"latest"` for the most recent.
+#' @inheritParams list_dags
+#'
+#' @return A list with elements `ok` (logical, overall integrity),
+#'   `files` (count), `mismatched` (character vector of file paths whose
+#'   contents changed), `missing` (expected but not found), `extra`
+#'   (found but not expected).
+#' @export
+verify_archive <- function(name, run_id, base_url = NULL) {
+  daggle_request(
+    c("api", "v1", "dags", name, "runs", run_id, "verify"),
+    method = "POST",
+    base_url = base_url
+  )
+}
+
+#' Download a tamper-evident run archive
+#'
+#' Creates (or refreshes) the server-side archive and writes the `.tar.gz`
+#' bytes to `dest`. Use [verify_archive()] afterwards to confirm integrity.
+#'
+#' This is the first wrapper in daggleR that returns a binary response.
+#' Future binary downloads should mirror this shape: resolve the base URL
+#' with [resolve_base_url()], build the request directly via
+#' [httr2::request()] and [httr2::req_url_path_append()] (skipping
+#' `daggle_request()`, which always parses the response as JSON), then
+#' persist with [writeBin()] on [httr2::resp_body_raw()].
+#'
+#' @param name Character string. Name of the DAG.
+#' @param run_id Character string. Run ID, or `"latest"` for the most recent.
+#' @param dest Character string. Local file path to write the archive to.
+#'   Defaults to a temporary file with extension `.tar.gz`.
+#' @inheritParams list_dags
+#'
+#' @return The absolute path to `dest`, returned invisibly.
+#' @export
+archive_run <- function(name, run_id, dest = tempfile(fileext = ".tar.gz"), base_url = NULL) {
+  archive_info(name, run_id, base_url = base_url)
+
+  url <- resolve_base_url(base_url)
+  req <- Reduce(
+    httr2::req_url_path_append,
+    c("api", "v1", "dags", name, "runs", run_id, "archive"),
+    httr2::request(url)
+  )
+  resp <- httr2::req_perform(req)
+  writeBin(httr2::resp_body_raw(resp), dest)
+  invisible(normalizePath(dest))
+}
