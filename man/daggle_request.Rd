@@ -6,7 +6,7 @@
 \usage{
 daggle_request(
   path,
-  method = c("GET", "POST", "DELETE"),
+  method = c("GET", "POST", "DELETE", "PATCH"),
   query = NULL,
   body = NULL,
   simplify = FALSE,
@@ -18,7 +18,7 @@ daggle_request(
 base URL via \code{\link[httr2:req_url]{httr2::req_url_path_append()}}. Example:
 \code{c("api", "v1", "dags", name, "runs", run_id)}.}
 
-\item{method}{HTTP method. One of \code{"GET"}, \code{"POST"}, \code{"DELETE"}.}
+\item{method}{HTTP method. One of \code{"GET"}, \code{"POST"}, \code{"DELETE"}, \code{"PATCH"}.}
 
 \item{query}{Named list of query parameters, or \code{NULL}. Elements whose
 value is \code{NULL} are dropped (so callers can pass optional filters
@@ -34,7 +34,8 @@ leave \code{FALSE} for single-object endpoints that should return a list.}
 }
 \value{
 Parsed JSON response — a list, or a data.frame when
-\code{simplify = TRUE}.
+\code{simplify = TRUE}. Returns \code{NULL} for responses with no body
+(e.g. \verb{204 No Content}).
 }
 \description{
 Internal helper used by the API wrappers. Builds an \code{httr2} request

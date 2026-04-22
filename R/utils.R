@@ -23,7 +23,7 @@ resolve_base_url <- function(base_url = NULL) {
 #' @param path Character vector of URL path segments appended after the
 #'   base URL via [httr2::req_url_path_append()]. Example:
 #'   `c("api", "v1", "dags", name, "runs", run_id)`.
-#' @param method HTTP method. One of `"GET"`, `"POST"`, `"DELETE"`.
+#' @param method HTTP method. One of `"GET"`, `"POST"`, `"DELETE"`, `"PATCH"`.
 #' @param query Named list of query parameters, or `NULL`. Elements whose
 #'   value is `NULL` are dropped (so callers can pass optional filters
 #'   without conditional wiring).
@@ -34,10 +34,11 @@ resolve_base_url <- function(base_url = NULL) {
 #' @param base_url Character string or `NULL`. Passed to [resolve_base_url()].
 #'
 #' @return Parsed JSON response — a list, or a data.frame when
-#'   `simplify = TRUE`.
+#'   `simplify = TRUE`. Returns `NULL` for responses with no body
+#'   (e.g. `204 No Content`).
 #' @keywords internal
 daggle_request <- function(path,
-                           method = c("GET", "POST", "DELETE"),
+                           method = c("GET", "POST", "DELETE", "PATCH"),
                            query = NULL,
                            body = NULL,
                            simplify = FALSE,
@@ -57,9 +58,9 @@ daggle_request <- function(path,
   if (method != "GET") {
     req <- httr2::req_method(req, method)
   }
-  req |>
-    httr2::req_perform() |>
-    httr2::resp_body_json(simplifyVector = simplify)
+  resp <- httr2::req_perform(req)
+  if (!httr2::resp_has_body(resp)) return(NULL)
+  httr2::resp_body_json(resp, simplifyVector = simplify)
 }
 
 #' Get the daggle CLI version

@@ -1,0 +1,8 @@
+{
+  "id": "sch-new-1",
+  "cron": "0 7 * * *",
+  "source": "runtime",
+  "enabled": true,
+  "next_run": "2026-04-23T07:00:00Z",
+  "params": {"date": "2024-01-01"}
+}
