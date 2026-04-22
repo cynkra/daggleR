@@ -425,3 +425,97 @@ get_impact <- function(name, base_url = NULL) {
     base_url = base_url
   )
 }
+
+#' List schedules for a DAG
+#'
+#' Returns every schedule registered for the DAG — both YAML-defined schedules
+#' and ones added at runtime via [add_schedule()].
+#'
+#' @param name Character string. Name of the DAG.
+#' @inheritParams list_dags
+#'
+#' @return A data.frame with columns `id`, `cron`, `source`, `enabled`,
+#'   `next_run`. The `source` column is `"yaml"` for schedules declared in
+#'   the DAG's YAML and `"runtime"` for ones added via the API. `next_run`
+#'   is an RFC3339 timestamp or the empty string when the schedule is
+#'   disabled. A `params` list-column is present when any schedule carries
+#'   parameter overrides.
+#' @export
+list_schedules <- function(name, base_url = NULL) {
+  daggle_request(
+    c("api", "v1", "dags", name, "schedules"),
+    simplify = TRUE,
+    base_url = base_url
+  )
+}
+
+#' Add a runtime schedule to a DAG
+#'
+#' Registers a new cron schedule without editing the DAG's YAML. The schedule
+#' is stored server-side with `source = "runtime"` and can be removed with
+#' [remove_schedule()].
+#'
+#' @param name Character string. Name of the DAG.
+#' @param cron Character string. Cron expression (e.g. `"0 7 * * *"`).
+#' @param params Named list of parameter overrides passed to each triggered
+#'   run, or `NULL`.
+#' @param enabled Logical. Whether the schedule fires immediately. Defaults
+#'   to `TRUE`.
+#' @inheritParams list_dags
+#'
+#' @return A list describing the created schedule: `id`, `cron`, `source`,
+#'   `enabled`, `next_run`, and (when set) `params`.
+#' @export
+add_schedule <- function(name, cron, params = NULL, enabled = TRUE, base_url = NULL) {
+  body <- list(cron = cron, enabled = enabled)
+  if (!is.null(params)) body$params <- params
+  daggle_request(
+    c("api", "v1", "dags", name, "schedules"),
+    method = "POST",
+    body = body,
+    base_url = base_url
+  )
+}
+
+#' Remove a runtime schedule from a DAG
+#'
+#' Only schedules added via [add_schedule()] (`source = "runtime"`) can be
+#' removed. Attempting to delete a YAML-declared schedule returns a `400
+#' Bad Request` from the server.
+#'
+#' @param name Character string. Name of the DAG.
+#' @param schedule_id Character string. ID of the schedule to remove, as
+#'   returned by [list_schedules()] or [add_schedule()].
+#' @inheritParams list_dags
+#'
+#' @return `TRUE`, invisibly.
+#' @export
+remove_schedule <- function(name, schedule_id, base_url = NULL) {
+  daggle_request(
+    c("api", "v1", "dags", name, "schedules", schedule_id),
+    method = "DELETE",
+    base_url = base_url
+  )
+  invisible(TRUE)
+}
+
+#' Enable or disable a schedule
+#'
+#' Toggles a schedule's `enabled` flag without otherwise modifying it. Works
+#' for both YAML- and runtime-sourced schedules.
+#'
+#' @param name Character string. Name of the DAG.
+#' @param schedule_id Character string. ID of the schedule to update.
+#' @param enabled Logical. `TRUE` to enable, `FALSE` to disable.
+#' @inheritParams list_dags
+#'
+#' @return A list with the updated schedule object.
+#' @export
+set_schedule_enabled <- function(name, schedule_id, enabled, base_url = NULL) {
+  daggle_request(
+    c("api", "v1", "dags", name, "schedules", schedule_id),
+    method = "PATCH",
+    body = list(enabled = enabled),
+    base_url = base_url
+  )
+}

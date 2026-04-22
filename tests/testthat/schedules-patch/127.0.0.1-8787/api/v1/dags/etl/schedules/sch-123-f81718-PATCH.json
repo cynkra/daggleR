@@ -1,0 +1,7 @@
+{
+  "id": "sch-123",
+  "cron": "*/15 * * * *",
+  "source": "runtime",
+  "enabled": false,
+  "next_run": ""
+}

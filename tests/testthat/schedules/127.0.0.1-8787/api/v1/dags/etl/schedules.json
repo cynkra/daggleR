@@ -1,0 +1,16 @@
+[
+  {
+    "id": "sch-yaml-1",
+    "cron": "0 7 * * *",
+    "source": "yaml",
+    "enabled": true,
+    "next_run": "2026-04-23T07:00:00Z"
+  },
+  {
+    "id": "sch-runtime-1",
+    "cron": "*/15 * * * *",
+    "source": "runtime",
+    "enabled": false,
+    "next_run": ""
+  }
+]
