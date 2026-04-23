@@ -1,3 +1,24 @@
+# daggleR 0.5.0
+
+## New features
+
+- `daggle_lint()`: shell-out wrapper around `daggle lint --format json`.
+  Returns a data.frame of diagnostics (missing scripts, unresolvable secrets,
+  unknown notification channels). Fits into CI and `goodpractice`-style
+  composite checks. Optional `check_packages = TRUE` also verifies that R
+  packages required by R-based step types are installed.
+
+## Documentation
+
+- README now shows a downstream-consumer example for the Phase 10
+  `database:`, `email:`, and `docker:` step types. These are authored in YAML
+  and executed by the daggle binary; their outputs are consumed from
+  downstream R steps via `daggle_get_output()`.
+- `_pkgdown.yml` reference index brought back in sync with exports: every
+  entry uses the new `daggle_` prefix, and the previously missing schedule,
+  archive, and `daggle_init_dag` functions are now grouped into their own
+  sections.
+
 # daggleR 0.4.0
 
 ## Breaking changes

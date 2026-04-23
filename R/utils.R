@@ -80,3 +80,64 @@ daggle_cli_version <- function() {
   out <- system2("daggle", "version", stdout = TRUE, stderr = TRUE)
   trimws(out)
 }
+
+#' Run `daggle lint` on a DAG
+#'
+#' Shells out to the local `daggle` CLI to run semantic diagnostics on a DAG
+#' (missing scripts, unresolvable secrets, unknown notification channels, and
+#' optionally missing R packages). Returns a tidy data.frame of diagnostics.
+#'
+#' Requires the `daggle` binary on the user's PATH.
+#'
+#' @param dag Character string. DAG name or path to a DAG YAML file.
+#' @param check_packages Logical. If `TRUE`, also verify that R packages
+#'   required by R-based step types (`rmd`, `coverage`, `pkgdown`, `pins`, ...)
+#'   are installed. Slower; runs a single `Rscript` invocation. Default `FALSE`.
+#' @param daggle_bin Character string. Path to the `daggle` binary. Defaults
+#'   to `"daggle"` (resolved via PATH).
+#'
+#' @return A data.frame with columns `path`, `line`, `col`, `severity`
+#'   (`"error"`, `"warning"`, `"info"`), `code`, and `message`. Returns a
+#'   zero-row data.frame when the DAG passes cleanly.
+#' @export
+#' @examples
+#' \dontrun{
+#' diagnostics <- daggle_lint("etl-pipeline")
+#' stopifnot(nrow(diagnostics[diagnostics$severity == "error", ]) == 0)
+#' }
+daggle_lint <- function(dag, check_packages = FALSE, daggle_bin = "daggle") {
+  args <- c("lint", dag, "--format", "json")
+  if (isTRUE(check_packages)) args <- c(args, "--check-packages")
+  res <- tryCatch(
+    suppressWarnings(
+      system2(daggle_bin, args, stdout = TRUE, stderr = TRUE)
+    ),
+    error = function(e) {
+      stop("daggle lint failed: ", conditionMessage(e), call. = FALSE)
+    }
+  )
+  status <- attr(res, "status")
+  if (!is.null(status) && !status %in% c(0L, 1L)) {
+    stop(
+      "daggle lint failed with exit code ", status, ":\n",
+      paste(res, collapse = "\n"),
+      call. = FALSE
+    )
+  }
+  if (!requireNamespace("jsonlite", quietly = TRUE)) {
+    stop(
+      "daggle_lint() requires the jsonlite package. ",
+      "Install with: install.packages('jsonlite')",
+      call. = FALSE
+    )
+  }
+  parsed <- jsonlite::fromJSON(paste(res, collapse = "\n"))
+  if (is.null(parsed) || length(parsed) == 0L) {
+    return(data.frame(
+      path = character(), line = integer(), col = integer(),
+      severity = character(), code = character(), message = character(),
+      stringsAsFactors = FALSE
+    ))
+  }
+  parsed
+}

@@ -111,6 +111,65 @@ daggleR::daggle_verify_archive("etl", run_id = "run-001")
 daggleR::daggle_health()
 ```
 
+### Consuming a `database:` / `email:` step type from R
+
+daggle's `database:`, `email:`, and `docker:` step types are authored in YAML
+and executed by the daggle binary — no R code is needed to invoke them. Their
+outputs can be read from downstream R steps with the usual `daggle_get_output()`:
+
+```yaml
+# .daggle/report.yaml
+name: daily-report
+steps:
+  - id: pull_orders
+    database:
+      driver: postgres
+      params:
+        dbname: analytics
+        host: ${env:PGHOST}
+        user: ${env:PGUSER}
+        password: ${env:PGPASSWORD}
+      query: SELECT * FROM orders WHERE created_at >= now() - interval '1 day'
+      output: data/orders.csv
+
+  - id: analyze
+    depends: [pull_orders]
+    script: R/analyze.R
+
+  - id: send_report
+    depends: [analyze]
+    email:
+      channel: team_smtp
+      subject: "Daily orders — {{.Today}}"
+      body: "{{.Params.summary}}"
+      attach: [data/orders.csv]
+```
+
+```r
+# R/analyze.R — downstream of the database step
+library(daggleR)
+
+# The database step exported the row count as an output
+row_count <- as.integer(daggle_get_output("pull_orders", "row_count"))
+message("Upstream fetched ", row_count, " orders")
+
+orders <- read.csv("data/orders.csv")
+# ...analysis...
+daggle_output("status", if (nrow(orders) > 0) "ok" else "empty")
+```
+
+### Lint a DAG from R
+
+`daggle_lint()` shells out to `daggle lint --format json` and returns a
+data.frame of diagnostics (missing scripts, unresolvable secrets, unknown
+notification channels, …). Fits into CI or `goodpractice`-style composite
+checks.
+
+```r
+diagnostics <- daggleR::daggle_lint("etl-pipeline")
+stopifnot(nrow(diagnostics[diagnostics$severity == "error", ]) == 0)
+```
+
 ### Project management
 
 ```r
