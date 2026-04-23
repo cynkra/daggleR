@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(git pull:*)",
-      "Bash(Rscript -e 'devtools::test\\(filter = \"\"api-phase7\"\"\\)')"
-    ]
-  }
-}
