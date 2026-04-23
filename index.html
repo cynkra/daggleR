@@ -35,7 +35,7 @@
 
     <a class="navbar-brand me-2" href="index.html">daggleR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,101 +82,169 @@
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
+<p>All exported functions are prefixed with <code>daggle_</code> to avoid masking common verbs (e.g. <code>plan()</code>, <code>trigger()</code>, <code>health()</code>) that other packages also export.</p>
 <div class="section level3">
 <h3 id="in-step-helpers-12-functions">In-step helpers (12 functions)<a class="anchor" aria-label="anchor" href="#in-step-helpers-12-functions"></a>
 </h3>
 <p>These functions are used inside R steps executed by daggle. They require no network access and no daggle binary.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Emit an output that downstream steps can read</span></span>
-<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/output.html">output</a></span><span class="op">(</span><span class="st">"row_count"</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_output.html">daggle_output</a></span><span class="op">(</span><span class="st">"row_count"</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Read metadata about the current run</span></span>
-<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/run_id.html">run_id</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/dag_name.html">dag_name</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/run_dir.html">run_dir</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_run_id.html">daggle_run_id</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_dag_name.html">daggle_dag_name</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_run_dir.html">daggle_run_dir</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Read an output from a completed upstream step</span></span>
-<span><span class="va">accuracy</span> <span class="op">&lt;-</span> <span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/get_output.html">get_output</a></span><span class="op">(</span><span class="st">"fit-lda"</span>, <span class="st">"accuracy"</span><span class="op">)</span></span>
+<span><span class="va">accuracy</span> <span class="op">&lt;-</span> <span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_get_output.html">daggle_get_output</a></span><span class="op">(</span><span class="st">"fit-lda"</span>, <span class="st">"accuracy"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Read a matrix parameter (for matrix steps)</span></span>
-<span><span class="va">region</span> <span class="op">&lt;-</span> <span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/get_matrix.html">get_matrix</a></span><span class="op">(</span><span class="st">"region"</span><span class="op">)</span></span>
+<span><span class="va">region</span> <span class="op">&lt;-</span> <span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_get_matrix.html">daggle_get_matrix</a></span><span class="op">(</span><span class="st">"region"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Emit a markdown summary for the step</span></span>
-<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/summary_md.html">summary_md</a></span><span class="op">(</span><span class="st">"## Results\n- 1542 rows processed"</span><span class="op">)</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_summary_md.html">daggle_summary_md</a></span><span class="op">(</span><span class="st">"## Results\n- 1542 rows processed"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Emit typed metadata</span></span>
-<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/meta_numeric.html">meta_numeric</a></span><span class="op">(</span><span class="st">"row_count"</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/meta_text.html">meta_text</a></span><span class="op">(</span><span class="st">"model_type"</span>, <span class="st">"linear regression"</span><span class="op">)</span></span>
-<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/meta_table.html">meta_table</a></span><span class="op">(</span><span class="st">"top5"</span>, <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">results</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/meta_image.html">meta_image</a></span><span class="op">(</span><span class="st">"residuals_plot"</span>, <span class="st">"output/residuals.png"</span><span class="op">)</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_meta_numeric.html">daggle_meta_numeric</a></span><span class="op">(</span><span class="st">"row_count"</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_meta_text.html">daggle_meta_text</a></span><span class="op">(</span><span class="st">"model_type"</span>, <span class="st">"linear regression"</span><span class="op">)</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_meta_table.html">daggle_meta_table</a></span><span class="op">(</span><span class="st">"top5"</span>, <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">results</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_meta_image.html">daggle_meta_image</a></span><span class="op">(</span><span class="st">"residuals_plot"</span>, <span class="st">"output/residuals.png"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Emit validation results</span></span>
-<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/validation.html">validation</a></span><span class="op">(</span><span class="st">"row_count"</span>, <span class="st">"pass"</span>, <span class="st">"Expected &gt; 0, got 1542"</span><span class="op">)</span></span>
-<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/validation.html">validation</a></span><span class="op">(</span><span class="st">"schema"</span>, <span class="st">"fail"</span>, <span class="st">"Column 'date' expected date, got character"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_validation.html">daggle_validation</a></span><span class="op">(</span><span class="st">"row_count"</span>, <span class="st">"pass"</span>, <span class="st">"Expected &gt; 0, got 1542"</span><span class="op">)</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_validation.html">daggle_validation</a></span><span class="op">(</span><span class="st">"schema"</span>, <span class="st">"fail"</span>, <span class="st">"Column 'date' expected date, got character"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="api-wrappers-26-functions">API wrappers (26 functions)<a class="anchor" aria-label="anchor" href="#api-wrappers-26-functions"></a>
+<h3 id="api-wrappers-31-functions">API wrappers (31 functions)<a class="anchor" aria-label="anchor" href="#api-wrappers-31-functions"></a>
 </h3>
 <p>These functions talk to a running daggle API server (<code>daggle serve</code>).</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># List all DAGs</span></span>
-<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/list_dags.html">list_dags</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_list_dags.html">daggle_list_dags</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Trigger a run</span></span>
-<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/trigger.html">trigger</a></span><span class="op">(</span><span class="st">"etl"</span>, params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>date <span class="op">=</span> <span class="st">"2024-01-01"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_trigger.html">daggle_trigger</a></span><span class="op">(</span><span class="st">"etl"</span>, params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>date <span class="op">=</span> <span class="st">"2024-01-01"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Check run status</span></span>
-<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/get_run.html">get_run</a></span><span class="op">(</span><span class="st">"etl"</span>, run_id <span class="op">=</span> <span class="st">"latest"</span><span class="op">)</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_get_run.html">daggle_get_run</a></span><span class="op">(</span><span class="st">"etl"</span>, run_id <span class="op">=</span> <span class="st">"latest"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Get outputs from a run</span></span>
-<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/get_outputs.html">get_outputs</a></span><span class="op">(</span><span class="st">"etl"</span>, run_id <span class="op">=</span> <span class="st">"latest"</span><span class="op">)</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_get_outputs.html">daggle_get_outputs</a></span><span class="op">(</span><span class="st">"etl"</span>, run_id <span class="op">=</span> <span class="st">"latest"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># View step logs</span></span>
-<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/get_step_log.html">get_step_log</a></span><span class="op">(</span><span class="st">"etl"</span>, run_id <span class="op">=</span> <span class="st">"run-001"</span>, step_id <span class="op">=</span> <span class="st">"extract"</span><span class="op">)</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_get_step_log.html">daggle_get_step_log</a></span><span class="op">(</span><span class="st">"etl"</span>, run_id <span class="op">=</span> <span class="st">"run-001"</span>, step_id <span class="op">=</span> <span class="st">"extract"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Approval gates</span></span>
-<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/approve.html">approve</a></span><span class="op">(</span><span class="st">"etl"</span>, run_id <span class="op">=</span> <span class="st">"run-001"</span>, step_id <span class="op">=</span> <span class="st">"deploy"</span><span class="op">)</span></span>
-<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/reject.html">reject</a></span><span class="op">(</span><span class="st">"etl"</span>, run_id <span class="op">=</span> <span class="st">"run-001"</span>, step_id <span class="op">=</span> <span class="st">"deploy"</span><span class="op">)</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_approve.html">daggle_approve</a></span><span class="op">(</span><span class="st">"etl"</span>, run_id <span class="op">=</span> <span class="st">"run-001"</span>, step_id <span class="op">=</span> <span class="st">"deploy"</span><span class="op">)</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_reject.html">daggle_reject</a></span><span class="op">(</span><span class="st">"etl"</span>, run_id <span class="op">=</span> <span class="st">"run-001"</span>, step_id <span class="op">=</span> <span class="st">"deploy"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Show execution plan with cache status</span></span>
-<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/plan.html">plan</a></span><span class="op">(</span><span class="st">"etl"</span><span class="op">)</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_plan.html">daggle_plan</a></span><span class="op">(</span><span class="st">"etl"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># List artifacts, summaries, metadata, and validations</span></span>
-<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/list_artifacts.html">list_artifacts</a></span><span class="op">(</span><span class="st">"etl"</span>, run_id <span class="op">=</span> <span class="st">"latest"</span><span class="op">)</span></span>
-<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/get_summaries.html">get_summaries</a></span><span class="op">(</span><span class="st">"etl"</span>, run_id <span class="op">=</span> <span class="st">"latest"</span><span class="op">)</span></span>
-<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/get_metadata.html">get_metadata</a></span><span class="op">(</span><span class="st">"etl"</span>, run_id <span class="op">=</span> <span class="st">"latest"</span><span class="op">)</span></span>
-<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/get_validations.html">get_validations</a></span><span class="op">(</span><span class="st">"etl"</span>, run_id <span class="op">=</span> <span class="st">"latest"</span><span class="op">)</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_list_artifacts.html">daggle_list_artifacts</a></span><span class="op">(</span><span class="st">"etl"</span>, run_id <span class="op">=</span> <span class="st">"latest"</span><span class="op">)</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_get_summaries.html">daggle_get_summaries</a></span><span class="op">(</span><span class="st">"etl"</span>, run_id <span class="op">=</span> <span class="st">"latest"</span><span class="op">)</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_get_metadata.html">daggle_get_metadata</a></span><span class="op">(</span><span class="st">"etl"</span>, run_id <span class="op">=</span> <span class="st">"latest"</span><span class="op">)</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_get_validations.html">daggle_get_validations</a></span><span class="op">(</span><span class="st">"etl"</span>, run_id <span class="op">=</span> <span class="st">"latest"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Compare two runs</span></span>
-<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/compare_runs.html">compare_runs</a></span><span class="op">(</span><span class="st">"etl"</span>, run1 <span class="op">=</span> <span class="st">"run-001"</span>, run2 <span class="op">=</span> <span class="st">"run-002"</span><span class="op">)</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_compare_runs.html">daggle_compare_runs</a></span><span class="op">(</span><span class="st">"etl"</span>, run1 <span class="op">=</span> <span class="st">"run-001"</span>, run2 <span class="op">=</span> <span class="st">"run-002"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Filter DAGs by ownership metadata</span></span>
-<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/list_dags.html">list_dags</a></span><span class="op">(</span>tag <span class="op">=</span> <span class="st">"etl"</span>, team <span class="op">=</span> <span class="st">"data"</span><span class="op">)</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_list_dags.html">daggle_list_dags</a></span><span class="op">(</span>tag <span class="op">=</span> <span class="st">"etl"</span>, team <span class="op">=</span> <span class="st">"data"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># See who depends on this DAG</span></span>
-<span><span class="va">impact</span> <span class="op">&lt;-</span> <span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/get_impact.html">get_impact</a></span><span class="op">(</span><span class="st">"etl"</span><span class="op">)</span></span>
+<span><span class="va">impact</span> <span class="op">&lt;-</span> <span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_get_impact.html">daggle_get_impact</a></span><span class="op">(</span><span class="st">"etl"</span><span class="op">)</span></span>
 <span><span class="va">impact</span><span class="op">$</span><span class="va">downstream_dags</span></span>
 <span><span class="va">impact</span><span class="op">$</span><span class="va">exposures</span></span>
 <span></span>
 <span><span class="co"># Attach a post-mortem note to a run</span></span>
-<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/add_annotation.html">add_annotation</a></span><span class="op">(</span><span class="st">"etl"</span>, <span class="st">"run-001"</span>, <span class="st">"DB was down - manual restart at 08:30"</span><span class="op">)</span></span>
-<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/list_annotations.html">list_annotations</a></span><span class="op">(</span><span class="st">"etl"</span>, <span class="st">"run-001"</span><span class="op">)</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_add_annotation.html">daggle_add_annotation</a></span><span class="op">(</span><span class="st">"etl"</span>, <span class="st">"run-001"</span>, <span class="st">"DB was down - manual restart at 08:30"</span><span class="op">)</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_list_annotations.html">daggle_list_annotations</a></span><span class="op">(</span><span class="st">"etl"</span>, <span class="st">"run-001"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Schedules</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_list_schedules.html">daggle_list_schedules</a></span><span class="op">(</span><span class="st">"etl"</span><span class="op">)</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_add_schedule.html">daggle_add_schedule</a></span><span class="op">(</span><span class="st">"etl"</span>, cron <span class="op">=</span> <span class="st">"0 7 * * *"</span><span class="op">)</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_set_schedule_enabled.html">daggle_set_schedule_enabled</a></span><span class="op">(</span><span class="st">"etl"</span>, schedule_id <span class="op">=</span> <span class="st">"sch-001"</span>, enabled <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_remove_schedule.html">daggle_remove_schedule</a></span><span class="op">(</span><span class="st">"etl"</span>, schedule_id <span class="op">=</span> <span class="st">"sch-001"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Tamper-evident run archives</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_archive_info.html">daggle_archive_info</a></span><span class="op">(</span><span class="st">"etl"</span>, run_id <span class="op">=</span> <span class="st">"run-001"</span><span class="op">)</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_archive_run.html">daggle_archive_run</a></span><span class="op">(</span><span class="st">"etl"</span>, run_id <span class="op">=</span> <span class="st">"run-001"</span>, dest <span class="op">=</span> <span class="st">"run-001.tar.gz"</span><span class="op">)</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_verify_archive.html">daggle_verify_archive</a></span><span class="op">(</span><span class="st">"etl"</span>, run_id <span class="op">=</span> <span class="st">"run-001"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Health check</span></span>
-<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/health.html">health</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_health.html">daggle_health</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="consuming-a-database--email-step-type-from-r">Consuming a <code>database:</code> / <code>email:</code> step type from R<a class="anchor" aria-label="anchor" href="#consuming-a-database--email-step-type-from-r"></a>
+</h3>
+<p>daggle’s <code>database:</code>, <code>email:</code>, and <code>docker:</code> step types are authored in YAML and executed by the daggle binary — no R code is needed to invoke them. Their outputs can be read from downstream R steps with the usual <code><a href="reference/daggle_get_output.html">daggle_get_output()</a></code>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># .daggle/report.yaml</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> daily-report</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="fu">steps</span><span class="kw">:</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> pull_orders</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="at">    </span><span class="fu">database</span><span class="kw">:</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="at">      </span><span class="fu">driver</span><span class="kw">:</span><span class="at"> postgres</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="at">      </span><span class="fu">params</span><span class="kw">:</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="at">        </span><span class="fu">dbname</span><span class="kw">:</span><span class="at"> analytics</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="at">        </span><span class="fu">host</span><span class="kw">:</span><span class="at"> ${env:PGHOST}</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="at">        </span><span class="fu">user</span><span class="kw">:</span><span class="at"> ${env:PGUSER}</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="at">        </span><span class="fu">password</span><span class="kw">:</span><span class="at"> ${env:PGPASSWORD}</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="at">      </span><span class="fu">query</span><span class="kw">:</span><span class="at"> SELECT * FROM orders WHERE created_at &gt;= now() - interval '1 day'</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="at">      </span><span class="fu">output</span><span class="kw">:</span><span class="at"> data/orders.csv</span></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> analyze</span></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="at">    </span><span class="fu">depends</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">pull_orders</span><span class="kw">]</span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="at">    </span><span class="fu">script</span><span class="kw">:</span><span class="at"> R/analyze.R</span></span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">id</span><span class="kw">:</span><span class="at"> send_report</span></span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a><span class="at">    </span><span class="fu">depends</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">analyze</span><span class="kw">]</span></span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a><span class="at">    </span><span class="fu">email</span><span class="kw">:</span></span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a><span class="at">      </span><span class="fu">channel</span><span class="kw">:</span><span class="at"> team_smtp</span></span>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a><span class="at">      </span><span class="fu">subject</span><span class="kw">:</span><span class="at"> </span><span class="st">"Daily orders — {{.Today}}"</span></span>
+<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a><span class="at">      </span><span class="fu">body</span><span class="kw">:</span><span class="at"> </span><span class="st">"{{.Params.summary}}"</span></span>
+<span id="cb4-25"><a href="#cb4-25" tabindex="-1"></a><span class="at">      </span><span class="fu">attach</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">data/orders.csv</span><span class="kw">]</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># R/analyze.R — downstream of the database step</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://cynkra.github.io/daggleR/">daggleR</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># The database step exported the row count as an output</span></span>
+<span><span class="va">row_count</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="reference/daggle_get_output.html">daggle_get_output</a></span><span class="op">(</span><span class="st">"pull_orders"</span>, <span class="st">"row_count"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"Upstream fetched "</span>, <span class="va">row_count</span>, <span class="st">" orders"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">orders</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"data/orders.csv"</span><span class="op">)</span></span>
+<span><span class="co"># ...analysis...</span></span>
+<span><span class="fu"><a href="reference/daggle_output.html">daggle_output</a></span><span class="op">(</span><span class="st">"status"</span>, <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">orders</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="st">"ok"</span> <span class="kw">else</span> <span class="st">"empty"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="lint-a-dag-from-r">Lint a DAG from R<a class="anchor" aria-label="anchor" href="#lint-a-dag-from-r"></a>
+</h3>
+<p><code><a href="reference/daggle_lint.html">daggle_lint()</a></code> shells out to <code>daggle lint --format json</code> and returns a data.frame of diagnostics (missing scripts, unresolvable secrets, unknown notification channels, …). Fits into CI or <code>goodpractice</code>-style composite checks.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">diagnostics</span> <span class="op">&lt;-</span> <span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_lint.html">daggle_lint</a></span><span class="op">(</span><span class="st">"etl-pipeline"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">diagnostics</span><span class="op">[</span><span class="va">diagnostics</span><span class="op">$</span><span class="va">severity</span> <span class="op">==</span> <span class="st">"error"</span>, <span class="op">]</span><span class="op">)</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="project-management">Project management<a class="anchor" aria-label="anchor" href="#project-management"></a>
 </h3>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># List registered projects</span></span>
-<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/list_projects.html">list_projects</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_list_projects.html">daggle_list_projects</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Register a project</span></span>
-<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/register_project.html">register_project</a></span><span class="op">(</span><span class="st">"/path/to/my-project"</span><span class="op">)</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_register_project.html">daggle_register_project</a></span><span class="op">(</span><span class="st">"/path/to/my-project"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Unregister a project</span></span>
-<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/unregister_project.html">unregister_project</a></span><span class="op">(</span><span class="st">"my-project"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_unregister_project.html">daggle_unregister_project</a></span><span class="op">(</span><span class="st">"my-project"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="scaffold-a-new-dag">Scaffold a new DAG<a class="anchor" aria-label="anchor" href="#scaffold-a-new-dag"></a>
+</h3>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Create .daggle/demo.yaml from a built-in template</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_init_dag.html">daggle_init_dag</a></span><span class="op">(</span><span class="st">"demo"</span>, template <span class="op">=</span> <span class="st">"minimal"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="base-url-configuration">Base URL configuration<a class="anchor" aria-label="anchor" href="#base-url-configuration"></a>
@@ -189,13 +257,13 @@
 <li>Default: <code>http://127.0.0.1:9090</code>
 </li>
 </ol>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Use a custom URL</span></span>
-<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/list_dags.html">list_dags</a></span><span class="op">(</span>base_url <span class="op">=</span> <span class="st">"http://daggle.internal:9090"</span><span class="op">)</span></span>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_list_dags.html">daggle_list_dags</a></span><span class="op">(</span>base_url <span class="op">=</span> <span class="st">"http://daggle.internal:9090"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Or set via environment variable</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>DAGGLE_API_URL <span class="op">=</span> <span class="st">"http://daggle.internal:9090"</span><span class="op">)</span></span>
-<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/list_dags.html">list_dags</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">daggleR</span><span class="fu">::</span><span class="fu"><a href="reference/daggle_list_dags.html">daggle_list_dags</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">

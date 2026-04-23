@@ -13,7 +13,7 @@ method, and optional query/body."><meta property="og:image" content="https://cyn
 
     <a class="navbar-brand me-2" href="../index.html">daggleR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,7 +54,7 @@ method, and optional query/body.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">daggle_request</span><span class="op">(</span></span>
 <span>  <span class="va">path</span>,</span>
-<span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"GET"</span>, <span class="st">"POST"</span>, <span class="st">"DELETE"</span><span class="op">)</span>,</span>
+<span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"GET"</span>, <span class="st">"POST"</span>, <span class="st">"DELETE"</span>, <span class="st">"PATCH"</span><span class="op">)</span>,</span>
 <span>  query <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  body <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  simplify <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -73,7 +73,7 @@ base URL via <code><a href="https://httr2.r-lib.org/reference/req_url.html" clas
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
-<dd><p>HTTP method. One of <code>"GET"</code>, <code>"POST"</code>, <code>"DELETE"</code>.</p></dd>
+<dd><p>HTTP method. One of <code>"GET"</code>, <code>"POST"</code>, <code>"DELETE"</code>, <code>"PATCH"</code>.</p></dd>
 
 
 <dt id="arg-query">query<a class="anchor" aria-label="anchor" href="#arg-query"></a></dt>
@@ -99,7 +99,8 @@ leave <code>FALSE</code> for single-object endpoints that should return a list.<
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>Parsed JSON response — a list, or a data.frame when
-<code>simplify = TRUE</code>.</p>
+<code>simplify = TRUE</code>. Returns <code>NULL</code> for responses with no body
+(e.g. <code>204 No Content</code>).</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

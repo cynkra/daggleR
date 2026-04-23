@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">daggleR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,84 +47,84 @@
 
       <dl><dt>
 
-          <code><a href="output.html">output()</a></code>
+          <code><a href="daggle_output.html">daggle_output()</a></code>
 
         </dt>
         <dd>Emit a daggle output marker</dd>
 
         <dt>
 
-          <code><a href="run_id.html">run_id()</a></code>
+          <code><a href="daggle_run_id.html">daggle_run_id()</a></code>
 
         </dt>
         <dd>Get the current daggle run ID</dd>
 
         <dt>
 
-          <code><a href="dag_name.html">dag_name()</a></code>
+          <code><a href="daggle_dag_name.html">daggle_dag_name()</a></code>
 
         </dt>
         <dd>Get the current DAG name</dd>
 
         <dt>
 
-          <code><a href="run_dir.html">run_dir()</a></code>
+          <code><a href="daggle_run_dir.html">daggle_run_dir()</a></code>
 
         </dt>
         <dd>Get the current run directory</dd>
 
         <dt>
 
-          <code><a href="get_matrix.html">get_matrix()</a></code>
+          <code><a href="daggle_get_matrix.html">daggle_get_matrix()</a></code>
 
         </dt>
         <dd>Get a matrix parameter value</dd>
 
         <dt>
 
-          <code><a href="get_output.html">get_output()</a></code>
+          <code><a href="daggle_get_output.html">daggle_get_output()</a></code>
 
         </dt>
         <dd>Read an output from a completed upstream step</dd>
 
         <dt>
 
-          <code><a href="summary_md.html">summary_md()</a></code>
+          <code><a href="daggle_summary_md.html">daggle_summary_md()</a></code>
 
         </dt>
         <dd>Emit a markdown summary for the current step</dd>
 
         <dt>
 
-          <code><a href="meta_numeric.html">meta_numeric()</a></code>
+          <code><a href="daggle_meta_numeric.html">daggle_meta_numeric()</a></code>
 
         </dt>
         <dd>Emit a numeric metadata value</dd>
 
         <dt>
 
-          <code><a href="meta_text.html">meta_text()</a></code>
+          <code><a href="daggle_meta_text.html">daggle_meta_text()</a></code>
 
         </dt>
         <dd>Emit a text metadata value</dd>
 
         <dt>
 
-          <code><a href="meta_table.html">meta_table()</a></code>
+          <code><a href="daggle_meta_table.html">daggle_meta_table()</a></code>
 
         </dt>
         <dd>Emit a table metadata value</dd>
 
         <dt>
 
-          <code><a href="meta_image.html">meta_image()</a></code>
+          <code><a href="daggle_meta_image.html">daggle_meta_image()</a></code>
 
         </dt>
         <dd>Emit an image metadata reference</dd>
 
         <dt>
 
-          <code><a href="validation.html">validation()</a></code>
+          <code><a href="daggle_validation.html">daggle_validation()</a></code>
 
         </dt>
         <dd>Emit a validation result</dd>
@@ -140,31 +140,38 @@
 
       <dl><dt>
 
-          <code><a href="list_dags.html">list_dags()</a></code>
+          <code><a href="daggle_list_dags.html">daggle_list_dags()</a></code>
 
         </dt>
         <dd>List all DAGs</dd>
 
         <dt>
 
-          <code><a href="get_dag.html">get_dag()</a></code>
+          <code><a href="daggle_get_dag.html">daggle_get_dag()</a></code>
 
         </dt>
         <dd>Get details for a single DAG</dd>
 
         <dt>
 
-          <code><a href="plan.html">plan()</a></code>
+          <code><a href="daggle_plan.html">daggle_plan()</a></code>
 
         </dt>
         <dd>Show execution plan with cache status</dd>
 
         <dt>
 
-          <code><a href="get_impact.html">get_impact()</a></code>
+          <code><a href="daggle_get_impact.html">daggle_get_impact()</a></code>
 
         </dt>
         <dd>Get downstream impact of a DAG</dd>
+
+        <dt>
+
+          <code><a href="daggle_init_dag.html">daggle_init_dag()</a></code>
+
+        </dt>
+        <dd>Scaffold a new DAG YAML under <code>.daggle/</code></dd>
       </dl></div><div class="section level2">
       <h2 id="run-management">Run management<a class="anchor" aria-label="anchor" href="#run-management"></a></h2>
 
@@ -177,91 +184,91 @@
 
       <dl><dt>
 
-          <code><a href="trigger.html">trigger()</a></code>
+          <code><a href="daggle_trigger.html">daggle_trigger()</a></code>
 
         </dt>
         <dd>Trigger a new DAG run</dd>
 
         <dt>
 
-          <code><a href="list_runs.html">list_runs()</a></code>
+          <code><a href="daggle_list_runs.html">daggle_list_runs()</a></code>
 
         </dt>
         <dd>List runs for a DAG</dd>
 
         <dt>
 
-          <code><a href="get_run.html">get_run()</a></code>
+          <code><a href="daggle_get_run.html">daggle_get_run()</a></code>
 
         </dt>
         <dd>Get details for a specific run</dd>
 
         <dt>
 
-          <code><a href="get_outputs.html">get_outputs()</a></code>
+          <code><a href="daggle_get_outputs.html">daggle_get_outputs()</a></code>
 
         </dt>
         <dd>Get outputs for a run</dd>
 
         <dt>
 
-          <code><a href="get_step_log.html">get_step_log()</a></code>
+          <code><a href="daggle_get_step_log.html">daggle_get_step_log()</a></code>
 
         </dt>
         <dd>Get log output for a step</dd>
 
         <dt>
 
-          <code><a href="cancel_run.html">cancel_run()</a></code>
+          <code><a href="daggle_cancel_run.html">daggle_cancel_run()</a></code>
 
         </dt>
         <dd>Cancel a running DAG run</dd>
 
         <dt>
 
-          <code><a href="compare_runs.html">compare_runs()</a></code>
+          <code><a href="daggle_compare_runs.html">daggle_compare_runs()</a></code>
 
         </dt>
         <dd>Compare two runs</dd>
 
         <dt>
 
-          <code><a href="list_artifacts.html">list_artifacts()</a></code>
+          <code><a href="daggle_list_artifacts.html">daggle_list_artifacts()</a></code>
 
         </dt>
         <dd>List artifacts for a run</dd>
 
         <dt>
 
-          <code><a href="get_summaries.html">get_summaries()</a></code>
+          <code><a href="daggle_get_summaries.html">daggle_get_summaries()</a></code>
 
         </dt>
         <dd>Get step summaries for a run</dd>
 
         <dt>
 
-          <code><a href="get_metadata.html">get_metadata()</a></code>
+          <code><a href="daggle_get_metadata.html">daggle_get_metadata()</a></code>
 
         </dt>
         <dd>Get step metadata for a run</dd>
 
         <dt>
 
-          <code><a href="get_validations.html">get_validations()</a></code>
+          <code><a href="daggle_get_validations.html">daggle_get_validations()</a></code>
 
         </dt>
         <dd>Get validation results for a run</dd>
 
         <dt>
 
-          <code><a href="list_annotations.html">list_annotations()</a></code>
+          <code><a href="daggle_list_annotations.html">daggle_list_annotations()</a></code>
 
         </dt>
         <dd>List annotations for a run</dd>
 
         <dt>
 
-          <code><a href="add_annotation.html">add_annotation()</a></code>
+          <code><a href="daggle_add_annotation.html">daggle_add_annotation()</a></code>
 
         </dt>
         <dd>Add an annotation to a run</dd>
@@ -277,17 +284,84 @@
 
       <dl><dt>
 
-          <code><a href="approve.html">approve()</a></code>
+          <code><a href="daggle_approve.html">daggle_approve()</a></code>
 
         </dt>
         <dd>Approve a waiting step</dd>
 
         <dt>
 
-          <code><a href="reject.html">reject()</a></code>
+          <code><a href="daggle_reject.html">daggle_reject()</a></code>
 
         </dt>
         <dd>Reject a waiting step</dd>
+      </dl></div><div class="section level2">
+      <h2 id="schedules">Schedules<a class="anchor" aria-label="anchor" href="#schedules"></a></h2>
+
+      <div class="section-desc"><p>List and manage runtime schedules.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="daggle_list_schedules.html">daggle_list_schedules()</a></code>
+
+        </dt>
+        <dd>List schedules for a DAG</dd>
+
+        <dt>
+
+          <code><a href="daggle_add_schedule.html">daggle_add_schedule()</a></code>
+
+        </dt>
+        <dd>Add a runtime schedule to a DAG</dd>
+
+        <dt>
+
+          <code><a href="daggle_remove_schedule.html">daggle_remove_schedule()</a></code>
+
+        </dt>
+        <dd>Remove a runtime schedule from a DAG</dd>
+
+        <dt>
+
+          <code><a href="daggle_set_schedule_enabled.html">daggle_set_schedule_enabled()</a></code>
+
+        </dt>
+        <dd>Enable or disable a schedule</dd>
+      </dl></div><div class="section level2">
+      <h2 id="archives">Archives<a class="anchor" aria-label="anchor" href="#archives"></a></h2>
+
+      <div class="section-desc"><p>Create, verify, and download tamper-evident run archives.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="daggle_archive_info.html">daggle_archive_info()</a></code>
+
+        </dt>
+        <dd>Create and describe a tamper-evident run archive</dd>
+
+        <dt>
+
+          <code><a href="daggle_verify_archive.html">daggle_verify_archive()</a></code>
+
+        </dt>
+        <dd>Verify integrity of a run archive</dd>
+
+        <dt>
+
+          <code><a href="daggle_archive_run.html">daggle_archive_run()</a></code>
+
+        </dt>
+        <dd>Download a tamper-evident run archive</dd>
       </dl></div><div class="section level2">
       <h2 id="project-management">Project management<a class="anchor" aria-label="anchor" href="#project-management"></a></h2>
 
@@ -300,21 +374,21 @@
 
       <dl><dt>
 
-          <code><a href="list_projects.html">list_projects()</a></code>
+          <code><a href="daggle_list_projects.html">daggle_list_projects()</a></code>
 
         </dt>
         <dd>List registered projects</dd>
 
         <dt>
 
-          <code><a href="register_project.html">register_project()</a></code>
+          <code><a href="daggle_register_project.html">daggle_register_project()</a></code>
 
         </dt>
         <dd>Register a project</dd>
 
         <dt>
 
-          <code><a href="unregister_project.html">unregister_project()</a></code>
+          <code><a href="daggle_unregister_project.html">daggle_unregister_project()</a></code>
 
         </dt>
         <dd>Unregister a project</dd>
@@ -330,24 +404,31 @@
 
       <dl><dt>
 
-          <code><a href="health.html">health()</a></code>
+          <code><a href="daggle_health.html">daggle_health()</a></code>
 
         </dt>
         <dd>Check API health</dd>
 
         <dt>
 
-          <code><a href="cleanup.html">cleanup()</a></code>
+          <code><a href="daggle_cleanup.html">daggle_cleanup()</a></code>
 
         </dt>
         <dd>Clean up old runs</dd>
 
         <dt>
 
-          <code><a href="cli_version.html">cli_version()</a></code>
+          <code><a href="daggle_cli_version.html">daggle_cli_version()</a></code>
 
         </dt>
         <dd>Get the daggle CLI version</dd>
+
+        <dt>
+
+          <code><a href="daggle_lint.html">daggle_lint()</a></code>
+
+        </dt>
+        <dd>Run <code>daggle lint</code> on a DAG</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>

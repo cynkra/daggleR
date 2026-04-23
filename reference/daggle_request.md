@@ -10,7 +10,7 @@ method, and optional query/body.
 ``` r
 daggle_request(
   path,
-  method = c("GET", "POST", "DELETE"),
+  method = c("GET", "POST", "DELETE", "PATCH"),
   query = NULL,
   body = NULL,
   simplify = FALSE,
@@ -28,7 +28,7 @@ daggle_request(
 
 - method:
 
-  HTTP method. One of `"GET"`, `"POST"`, `"DELETE"`.
+  HTTP method. One of `"GET"`, `"POST"`, `"DELETE"`, `"PATCH"`.
 
 - query:
 
@@ -56,3 +56,4 @@ daggle_request(
 ## Value
 
 Parsed JSON response — a list, or a data.frame when `simplify = TRUE`.
+Returns `NULL` for responses with no body (e.g. `204 No Content`).
