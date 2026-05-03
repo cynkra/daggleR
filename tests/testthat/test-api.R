@@ -26,6 +26,25 @@ test_that("daggle_trigger() returns run info", {
   })
 })
 
+test_that("daggle_trigger() encodes empty params as a JSON object, not array", {
+  captured <- NULL
+  resp <- httr2::response(
+    status_code = 200L,
+    headers = list("Content-Type" = "application/json"),
+    body = charToRaw('{"run_id":"r1","status":"queued"}')
+  )
+  httr2::with_mocked_responses(
+    function(req) {
+      captured <<- req
+      resp
+    },
+    daggle_trigger("etl", base_url = "http://127.0.0.1:8787")
+  )
+  # `params` must be a *named* empty list so jsonlite emits `{}` rather than
+  # `[]`; the daggle API rejects the array form with HTTP 400.
+  expect_identical(names(captured$body$data$params), character(0))
+})
+
 test_that("daggle_list_runs() returns a data.frame", {
   httptest2::with_mock_dir("runs", {
     result <- daggle_list_runs("etl", base_url = "http://127.0.0.1:8787")

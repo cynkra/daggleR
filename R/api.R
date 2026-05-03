@@ -51,6 +51,11 @@ daggle_get_dag <- function(name, base_url = NULL) {
 #' @return A list with elements: `run_id`, `status`.
 #' @export
 daggle_trigger <- function(name, params = list(), base_url = NULL) {
+  # Empty unnamed list serialises to JSON `[]`; the API requires `{}`.
+  if (length(params) == 0L) {
+    params <- list()
+    names(params) <- character(0)
+  }
   daggle_request(
     c("api", "v1", "dags", name, "run"),
     method = "POST",
