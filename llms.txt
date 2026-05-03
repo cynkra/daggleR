@@ -7,6 +7,7 @@ lightweight DAG scheduler for R.
 ## Installation
 
 ``` r
+
 # install.packages("pak")
 pak::pak("cynkra/daggleR")
 ```
@@ -23,6 +24,7 @@ These functions are used inside R steps executed by daggle. They require
 no network access and no daggle binary.
 
 ``` r
+
 # Emit an output that downstream steps can read
 daggleR::daggle_output("row_count", nrow(df))
 
@@ -56,6 +58,7 @@ daggleR::daggle_validation("schema", "fail", "Column 'date' expected date, got c
 These functions talk to a running daggle API server (`daggle serve`).
 
 ``` r
+
 # List all DAGs
 daggleR::daggle_list_dags()
 
@@ -150,6 +153,7 @@ steps:
 ```
 
 ``` r
+
 # R/analyze.R — downstream of the database step
 library(daggleR)
 
@@ -170,6 +174,7 @@ diagnostics (missing scripts, unresolvable secrets, unknown notification
 channels, …). Fits into CI or `goodpractice`-style composite checks.
 
 ``` r
+
 diagnostics <- daggleR::daggle_lint("etl-pipeline")
 stopifnot(nrow(diagnostics[diagnostics$severity == "error", ]) == 0)
 ```
@@ -177,6 +182,7 @@ stopifnot(nrow(diagnostics[diagnostics$severity == "error", ]) == 0)
 ### Project management
 
 ``` r
+
 # List registered projects
 daggleR::daggle_list_projects()
 
@@ -190,6 +196,7 @@ daggleR::daggle_unregister_project("my-project")
 ### Scaffold a new DAG
 
 ``` r
+
 # Create .daggle/demo.yaml from a built-in template
 daggleR::daggle_init_dag("demo", template = "minimal")
 ```
@@ -203,6 +210,7 @@ API functions resolve the base URL in this order:
 3.  Default: `http://127.0.0.1:9090`
 
 ``` r
+
 # Use a custom URL
 daggleR::daggle_list_dags(base_url = "http://daggle.internal:9090")
 
